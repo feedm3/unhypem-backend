@@ -15,3 +15,10 @@ To start the project simply hit
 ```
 gradlew bootRun
 ```
+
+## Test
+
+To start all test use
+```
+gradlew test
+```
