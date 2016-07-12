@@ -1,10 +1,11 @@
 package com.codecrafters;
 
-import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
+
+import static com.google.common.truth.Truth.assertThat;
 
 /**
  * @author Fabian Dietenberger
@@ -20,12 +21,19 @@ public class HypemAdapterTest {
     private RestTemplate restTemplate = new RestTemplate();
 
     @Test
-    public void getFileUriById() {
-        final HypemAdapter hypemService = new HypemAdapter(restTemplate);
-        final URI fileUri = hypemService.getFileUriByHypemId(HYPEM_ID_SOUNDCLOUD_SONG);
+    public void testGetSoundcloudUrlFromHypemId() {
+        final HypemAdapter hypemAdapter = new HypemAdapter(restTemplate);
+        final URI fileUri = hypemAdapter.getFileUriByHypemId(HYPEM_ID_SOUNDCLOUD_SONG);
 
-        Assert.assertNotNull(fileUri);
-        Assert.assertEquals("soundcloud.com", fileUri.getHost());
+        assertThat(fileUri.getHost()).isEqualTo("soundcloud.com");
+    }
+
+    @Test
+    public void testGetMp3UrlFromHypemId() {
+        final HypemAdapter hypemAdapter = new HypemAdapter(restTemplate);
+        final URI fileUri = hypemAdapter.getFileUriByHypemId(HYPEM_ID_MP3_SONG);
+
+        assertThat(fileUri.getPath()).endsWith(".mp3");
     }
 
 }
