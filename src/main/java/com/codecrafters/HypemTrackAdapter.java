@@ -36,6 +36,17 @@ public class HypemTrackAdapter {
         this.objectMapper = new ObjectMapper();
     }
 
+    public String getHypemMediaIdFromUrl(final String hypemTrackUrl) {
+        final String trimmedUrl = StringUtils.trim(hypemTrackUrl);
+        if (StringUtils.startsWith(trimmedUrl, HYPEM_TRACK_URL)) {
+            final URI trackUri = URI.create(trimmedUrl);
+            final String path = trackUri.getPath();
+            final String hypemMediaId = path.split("/")[2];
+            return hypemMediaId;
+        }
+        return null;
+    }
+
     public URI getFileUriByHypemId(final String hypemId) {
         final RequestEntity<Void> requestEntity = RequestEntity.head(URI.create(HYPEM_GO_URL + hypemId)).build();
         final ResponseEntity<Void> exchange = restTemplate.exchange(requestEntity, Void.class);
