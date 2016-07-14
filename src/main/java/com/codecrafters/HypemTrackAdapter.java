@@ -17,7 +17,7 @@ import java.net.URI;
  *
  * @author Fabian Dietenberger
  */
-public class HypemAdapter {
+public class HypemTrackAdapter {
 
     private static final String SOUNDCLOUD_HOST_NAME = "soundcloud.com";
 
@@ -31,7 +31,7 @@ public class HypemAdapter {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public HypemAdapter(final RestTemplate restTemplate) {
+    public HypemTrackAdapter(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.objectMapper = new ObjectMapper();
     }
