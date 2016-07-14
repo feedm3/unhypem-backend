@@ -2,17 +2,14 @@ language: java
 jdk: oraclejdk8
 
 env:
+   - spring.datasource.url=jdbc:postgresql://localhost:5432/unhypemboot
    - spring.datasource.password=
 
 addons:
     postgresql: "9.4"
 
-cache:
-  directories:
-    - $HOME/.gradle
-
 before_script:
-    - psql -c "create database unhypem-boot;" -U postgres
+    - psql -c "create database unhypemboot;" -U postgres
 
 before_install:
     - chmod +x gradlew
