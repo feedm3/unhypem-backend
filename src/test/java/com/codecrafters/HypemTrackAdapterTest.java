@@ -22,9 +22,33 @@ public class HypemTrackAdapterTest {
     private final HypemTrackAdapter hypemTrackAdapter = new HypemTrackAdapter(new RestTemplate());
 
     @Test
-    public void testConvertTrackUrlToId() {
+    public void testConvertUrlToId() {
         final String hypemMediaId = hypemTrackAdapter.getHypemMediaIdFromUrl(HYPEM_URL_SOUNDCLOUD_SONG);
         assertThat(hypemMediaId).isEqualTo(HYPEM_ID_SOUNDCLOUD_SONG);
+    }
+
+    @Test
+    public void testConvertUrlToIdShouldIgnoreLeadingAndEndingWhitespace() {
+        final String hypemMediaId = hypemTrackAdapter.getHypemMediaIdFromUrl("    " + HYPEM_URL_SOUNDCLOUD_SONG + "  ");
+        assertThat(hypemMediaId).isEqualTo(HYPEM_ID_SOUNDCLOUD_SONG);
+    }
+
+    @Test
+    public void testConvertUrlToIdWhenUrlIsExtended() {
+        final String hypemMediaId = hypemTrackAdapter.getHypemMediaIdFromUrl(HYPEM_URL_SOUNDCLOUD_SONG + "/this/is/test");
+        assertThat(hypemMediaId).isEqualTo(HYPEM_ID_SOUNDCLOUD_SONG);
+    }
+
+    @Test
+    public void testConvertUrlToEmptyStringWhenUrlIsInvalid() {
+        String hypemMediaId = hypemTrackAdapter.getHypemMediaIdFromUrl("this_is/not.an)valid#url");
+        assertThat(hypemMediaId).isEmpty();
+
+        hypemMediaId = hypemTrackAdapter.getHypemMediaIdFromUrl("http://hypem.com/test/?01");
+        assertThat(hypemMediaId).isEmpty();
+
+        hypemMediaId = hypemTrackAdapter.getHypemMediaIdFromUrl("http://hypem.com/track/");
+        assertThat(hypemMediaId).isEmpty();
     }
 
     @Test

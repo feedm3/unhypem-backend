@@ -41,10 +41,13 @@ public class HypemTrackAdapter {
         if (StringUtils.startsWith(trimmedUrl, HYPEM_TRACK_URL)) {
             final URI trackUri = URI.create(trimmedUrl);
             final String path = trackUri.getPath();
-            final String hypemMediaId = path.split("/")[2];
-            return hypemMediaId;
+            final String[] pathParts = path.split("/");
+            if (pathParts.length >= 3) {
+                final String hypemMediaId = path.split("/")[2];
+                return hypemMediaId;
+            }
         }
-        return null;
+        return "";
     }
 
     public URI getFileUriByHypemId(final String hypemId) {
