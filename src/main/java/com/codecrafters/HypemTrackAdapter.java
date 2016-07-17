@@ -6,6 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.client.ClientHttpResponse;
+import org.springframework.web.client.ResponseErrorHandler;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -51,33 +53,47 @@ public class HypemTrackAdapter {
     }
 
     public URI getFileUriByHypemId(final String hypemId) {
-        final RequestEntity<Void> requestEntity = RequestEntity.head(URI.create(HYPEM_GO_URL + hypemId)).build();
-        final ResponseEntity<Void> exchange = restTemplate.exchange(requestEntity, Void.class);
-        final URI fileUri = exchange.getHeaders().getLocation();
+        if (StringUtils.isNotBlank(hypemId)) {
+            final RequestEntity<Void> requestEntity = RequestEntity.head(URI.create(HYPEM_GO_URL + hypemId)).build();
+            final ResponseEntity<Void> exchange = restTemplate.exchange(requestEntity, Void.class);
+            final URI fileUri = exchange.getHeaders().getLocation();
 
-        if (isSoundcloudUrl(fileUri)) {
-            return fileUri;
-        } else {
-            final String key = getTrackUrlAccessKey(hypemId);
+            if (isSoundcloudUrl(fileUri)) {
+                return fileUri;
+            } else {
+                final String key = getTrackUrlAccessKey(hypemId);
 
-            final RequestEntity<Void> mp3Request = RequestEntity.get(URI.create(HYPEM_SERVE_URL + hypemId + "/" + key)).header("Cookie", HYPEM_AUTH_COOKIE).build();
-            final ResponseEntity<String> mp3Response = restTemplate.exchange(mp3Request, String.class);
+                final RequestEntity<Void> mp3Request = RequestEntity.get(URI.create(HYPEM_SERVE_URL + hypemId + "/" + key)).header("Cookie", HYPEM_AUTH_COOKIE).build();
+                restTemplate.setErrorHandler(new ResponseErrorHandler() {
+                    @Override
+                    public boolean hasError(final ClientHttpResponse response) throws IOException {
+                        return false;
+                    }
 
-            if (mp3Response.getStatusCode() == HttpStatus.OK) {
-                final String body = mp3Response.getBody();
-                try {
-                    final JsonNode mp3ResponseJsonNode = objectMapper.readTree(body);
-                    final String url = mp3ResponseJsonNode.get("url").asText();
-                    return URI.create(url);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    // if this exception occurs we have to improve the - vary naive - parsing
+                    @Override
+                    public void handleError(final ClientHttpResponse response) throws IOException {
+
+                    }
+                });
+                final ResponseEntity<String> mp3Response = restTemplate.exchange(mp3Request, String.class);
+
+                if (mp3Response.getStatusCode() == HttpStatus.OK) {
+                    final String body = mp3Response.getBody();
+                    try {
+                        final JsonNode mp3ResponseJsonNode = objectMapper.readTree(body);
+                        final String url = mp3ResponseJsonNode.get("url").asText();
+                        return URI.create(url);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                        // if this exception occurs we have to improve the - vary naive - parsing
+                        return null;
+                    }
+                } else {
                     return null;
                 }
-            } else {
-                return null;
             }
         }
+        return null;
     }
 
     /**

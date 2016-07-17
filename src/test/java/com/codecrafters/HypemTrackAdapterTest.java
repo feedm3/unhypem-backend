@@ -63,4 +63,28 @@ public class HypemTrackAdapterTest {
         assertThat(fileUri.getPath()).endsWith(".mp3");
     }
 
+    @Test
+    public void testSongIsNotHosted() {
+        final URI fileUri = hypemTrackAdapter.getFileUriByHypemId(HYPEM_ID_NO_FILE_SONG);
+        assertThat(fileUri).isNull();
+    }
+
+    @Test
+    public void testSongHostIsForbidden() {
+        final URI fileUri = hypemTrackAdapter.getFileUriByHypemId(HYPEM_ID_FORBIDDEN_SONG);
+        assertThat(fileUri).isNull();
+    }
+
+    @Test
+    public void testHypemIdIsNullOrEmpty() {
+        final URI emptyHypemIdUri = hypemTrackAdapter.getFileUriByHypemId("");
+        assertThat(emptyHypemIdUri).isNull();
+
+        final URI blankHypemIdUri = hypemTrackAdapter.getFileUriByHypemId("       ");
+        assertThat(blankHypemIdUri).isNull();
+
+        final URI nullHypemIdUri = hypemTrackAdapter.getFileUriByHypemId(null);
+        assertThat(nullHypemIdUri).isNull();
+    }
+
 }
