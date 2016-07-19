@@ -2,9 +2,7 @@ language: java
 jdk: oraclejdk8
 
 env:
-    global:
-        - spring\.datasource\.url="jdbc:postgresql://localhost:5432/unhypemboot"
-          spring\.datasource\.password=""
+    - SPRING_PROFILES_ACTIVE=travis
 
 addons:
     postgresql: "9.4"
