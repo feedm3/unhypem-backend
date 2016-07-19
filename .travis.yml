@@ -1,13 +1,11 @@
 language: java
 jdk: oraclejdk8
 
-env:
-    global:
-        - spring\.datasource\.url'="jdbc:postgresql://localhost:5432/unhypemboot"
-        - spring\.datasource\.password'=""
-
 addons:
     postgresql: "9.4"
+
+env:
+    - SPRING_PROFILES_ACTIVE=travis
 
 before_script:
     - psql -c "create database unhypemboot;" -U postgres
