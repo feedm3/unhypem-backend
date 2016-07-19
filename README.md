@@ -7,7 +7,7 @@ Backend for [Unhypem](https://github.com/feedm3/unhypem) implemented with Java.
 
 ## Setup
 
-- Postgres Database (9.5): `localhost:5432/unhypem-boot`
+- Postgres Database (9.5): `localhost:5432/unhypemboot`
 
 ## Run
 
