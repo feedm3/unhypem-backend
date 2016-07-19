@@ -9,6 +9,3 @@ addons:
 
 before_script:
     - psql -c "create database unhypemboot;" -U postgres
-
-before_install:
-    - chmod +x gradlew
