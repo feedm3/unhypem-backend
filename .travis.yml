@@ -4,11 +4,11 @@ jdk: oraclejdk8
 addons:
     postgresql: "9.4"
 
+env:
+    - SPRING_PROFILES_ACTIVE=travis
+
 before_script:
     - psql -c "create database unhypemboot;" -U postgres
 
 before_install:
     - chmod +x gradlew
-
-script:
-    - ./gradlew test -Dspring.profiles.active=travis
