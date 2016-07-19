@@ -1,9 +1,6 @@
 language: java
 jdk: oraclejdk8
 
-env:
-    - SPRING_PROFILES_ACTIVE=travis
-
 addons:
     postgresql: "9.4"
 
@@ -12,3 +9,6 @@ before_script:
 
 before_install:
     - chmod +x gradlew
+
+script:
+    - ./gradlew test -Dspring.profiles.active=travis
