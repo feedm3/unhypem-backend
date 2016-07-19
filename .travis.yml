@@ -4,7 +4,7 @@ jdk: oraclejdk8
 env:
     global:
         - spring\.datasource\.url="jdbc:postgresql://localhost:5432/unhypemboot"
-        - spring\.datasource\.password=""
+          spring\.datasource\.password=""
 
 addons:
     postgresql: "9.4"
