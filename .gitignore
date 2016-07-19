@@ -194,3 +194,4 @@ buildNumber.properties
 
 ## Custom
 !gradle/wrapper/*.jar
+.idea/inspectionProfiles
