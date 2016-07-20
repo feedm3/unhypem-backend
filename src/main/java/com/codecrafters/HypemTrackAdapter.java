@@ -36,64 +36,84 @@ public class HypemTrackAdapter {
     public HypemTrackAdapter(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.objectMapper = new ObjectMapper();
+        setupRestErrorHandler();
     }
 
+    /**
+     * Get the hypem id from a hypem track URL. This function simply extracts the id from the URL.
+     * <p>
+     * Example: http://hypem.com/track/2c87x will return 2c87x
+     *
+     * @param hypemTrackUrl the hypem URL to a song
+     * @return the media id from the URL or an empty string if the URL is not valid
+     */
     public String getHypemMediaIdFromUrl(final String hypemTrackUrl) {
         final String trimmedUrl = StringUtils.trim(hypemTrackUrl);
         if (StringUtils.startsWith(trimmedUrl, HYPEM_TRACK_URL)) {
-            final URI trackUri = URI.create(trimmedUrl);
-            final String path = trackUri.getPath();
-            final String[] pathParts = path.split("/");
-            if (pathParts.length >= 3) {
-                final String hypemMediaId = path.split("/")[2];
-                return hypemMediaId;
-            }
+            return extractIdFromHypemUrl(trimmedUrl);
         }
         return "";
     }
 
+    /**
+     * Get the songs hosting URL from a hypem id. Most of the times it's a soundcloud or mp3 URL.
+     *
+     * @param hypemId the hypem id to resolve the hosting URL
+     * @return the URL to the song or null if the id cannot be resolved
+     */
     public URI getFileUriByHypemId(final String hypemId) {
         if (StringUtils.isNotBlank(hypemId)) {
-            final RequestEntity<Void> requestEntity = RequestEntity.head(URI.create(HYPEM_GO_URL + hypemId)).build();
-            final ResponseEntity<Void> exchange = restTemplate.exchange(requestEntity, Void.class);
-            final URI fileUri = exchange.getHeaders().getLocation();
-
-            if (isSoundcloudUrl(fileUri)) {
-                return fileUri;
+            final URI goUrl = getHostingGoUrl(hypemId);
+            if (isSoundcloudUrl(goUrl)) {
+                return goUrl;
             } else {
-                final String key = getTrackUrlAccessKey(hypemId);
-
-                final RequestEntity<Void> mp3Request = RequestEntity.get(URI.create(HYPEM_SERVE_URL + hypemId + "/" + key)).header("Cookie", HYPEM_AUTH_COOKIE).build();
-                restTemplate.setErrorHandler(new ResponseErrorHandler() {
-                    @Override
-                    public boolean hasError(final ClientHttpResponse response) throws IOException {
-                        return false;
-                    }
-
-                    @Override
-                    public void handleError(final ClientHttpResponse response) throws IOException {
-
-                    }
-                });
-                final ResponseEntity<String> mp3Response = restTemplate.exchange(mp3Request, String.class);
-
-                if (mp3Response.getStatusCode() == HttpStatus.OK) {
-                    final String body = mp3Response.getBody();
-                    try {
-                        final JsonNode mp3ResponseJsonNode = objectMapper.readTree(body);
-                        final String url = mp3ResponseJsonNode.get("url").asText();
-                        return URI.create(url);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        // if this exception occurs we have to improve the - vary naive - parsing
-                        return null;
-                    }
-                } else {
-                    return null;
+                // if the song is not hosted on soundcloud we need to request another hypem endpoint
+                final String jsonBody = getHostingServeJsonBody(hypemId);
+                if (StringUtils.isNotBlank(jsonBody)) {
+                    return extractUrlField(jsonBody);
                 }
             }
         }
         return null;
+    }
+
+    private String extractIdFromHypemUrl(final String hypemTrackUrl) {
+        final URI trackUri = URI.create(hypemTrackUrl);
+        final String[] pathParts = trackUri.getPath().split("/");
+        if (pathParts.length >= 3) {
+            // looks like "/track/id"
+            return pathParts[2];
+        }
+        return "";
+    }
+
+    private URI getHostingGoUrl(final String hypemId) {
+        final RequestEntity<Void> requestEntity = RequestEntity.head(URI.create(HYPEM_GO_URL + hypemId)).build();
+        final ResponseEntity<Void> exchange = restTemplate.exchange(requestEntity, Void.class);
+        return exchange.getHeaders().getLocation();
+    }
+
+    private String getHostingServeJsonBody(final String hypemId) {
+        final String key = getTrackUrlAccessKey(hypemId);
+        final RequestEntity<Void> mp3Request = RequestEntity.get(URI.create(HYPEM_SERVE_URL + hypemId + "/" + key)).header("Cookie", HYPEM_AUTH_COOKIE).build();
+        final ResponseEntity<String> mp3Response = restTemplate.exchange(mp3Request, String.class);
+
+        if (mp3Response.getStatusCode() == HttpStatus.OK) {
+            return mp3Response.getBody();
+        }
+        return "";
+    }
+
+    private URI extractUrlField(final String json) {
+        try {
+            final JsonNode mp3ResponseJsonNode = objectMapper.readTree(json);
+            final String url = mp3ResponseJsonNode.get("url").asText();
+            return URI.create(url);
+        } catch (IOException e) {
+            // if this exception occurs we have to improve the - vary naive - parsing
+            e.printStackTrace();
+            return null;
+        }
     }
 
     /**
@@ -126,5 +146,19 @@ public class HypemTrackAdapter {
         return fileUri != null &&
                 StringUtils.equals(fileUri.getHost(), SOUNDCLOUD_HOST_NAME) &&
                 !StringUtils.equals(fileUri.getPath(), "/not/found");
+    }
+
+    private void setupRestErrorHandler() {
+        restTemplate.setErrorHandler(new ResponseErrorHandler() {
+            @Override
+            public boolean hasError(final ClientHttpResponse response) throws IOException {
+                return false;
+            }
+
+            @Override
+            public void handleError(final ClientHttpResponse response) throws IOException {
+
+            }
+        });
     }
 }
