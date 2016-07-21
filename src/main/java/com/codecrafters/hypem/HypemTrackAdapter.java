@@ -1,4 +1,4 @@
-package com.codecrafters;
+package com.codecrafters.hypem;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;

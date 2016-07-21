@@ -1,4 +1,4 @@
-package com.codecrafters;
+package com.codecrafters.soundcloud;
 
 /**
  * @author Fabian Dietenberger
