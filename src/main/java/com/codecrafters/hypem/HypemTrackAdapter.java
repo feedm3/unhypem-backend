@@ -2,6 +2,7 @@ package com.codecrafters.hypem;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.base.Preconditions;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Optional;
 
 /**
  * This class is used to get the hosting URL of a song on hypem. All you need is the hypem id of the song (the id is
@@ -46,13 +48,13 @@ public class HypemTrackAdapter {
      *
      * @param hypemTrackUrl the hypem URL to a song
      * @return the media id from the URL or an empty string if the URL is not valid
+     * @throws IllegalArgumentException if the hypemTrackUrl is not valid
      */
     public String getHypemMediaIdFromUrl(final String hypemTrackUrl) {
-        final String trimmedUrl = StringUtils.trim(hypemTrackUrl);
-        if (StringUtils.startsWith(trimmedUrl, HYPEM_TRACK_URL)) {
-            return extractIdFromHypemUrl(trimmedUrl);
-        }
-        return "";
+        Preconditions.checkArgument(hypemTrackUrl != null);
+        Preconditions.checkArgument(hypemTrackUrl.startsWith(HYPEM_TRACK_URL));
+        Preconditions.checkArgument(hypemTrackUrl.split("/").length >= 5);
+        return hypemTrackUrl.split("/")[4];
     }
 
     /**
@@ -61,30 +63,20 @@ public class HypemTrackAdapter {
      * @param hypemId the hypem id to resolve the hosting URL
      * @return the URL to the song or null if the id cannot be resolved
      */
-    public URI getFileUriByHypemId(final String hypemId) {
+    public Optional<URI> getFileUriByHypemId(final String hypemId) {
         if (StringUtils.isNotBlank(hypemId)) {
             final URI goUrl = getHostingGoUrl(hypemId);
             if (isSoundcloudUrl(goUrl)) {
-                return goUrl;
+                return Optional.of(goUrl);
             } else {
                 // if the song is not hosted on soundcloud we need to request another hypem endpoint
                 final String jsonBody = getHostingServeJsonBody(hypemId);
                 if (StringUtils.isNotBlank(jsonBody)) {
-                    return extractUrlField(jsonBody);
+//                    return extractUrlField(jsonBody);
                 }
             }
         }
-        return null;
-    }
-
-    private String extractIdFromHypemUrl(final String hypemTrackUrl) {
-        final URI trackUri = URI.create(hypemTrackUrl);
-        final String[] pathParts = trackUri.getPath().split("/");
-        if (pathParts.length >= 3) {
-            // looks like "/track/id"
-            return pathParts[2];
-        }
-        return "";
+        return Optional.empty();
     }
 
     private URI getHostingGoUrl(final String hypemId) {
@@ -102,18 +94,6 @@ public class HypemTrackAdapter {
             return mp3Response.getBody();
         }
         return "";
-    }
-
-    private URI extractUrlField(final String json) {
-        try {
-            final JsonNode mp3ResponseJsonNode = objectMapper.readTree(json);
-            final String url = mp3ResponseJsonNode.get("url").asText();
-            return URI.create(url);
-        } catch (IOException e) {
-            // if this exception occurs we have to improve the - vary naive - parsing
-            e.printStackTrace();
-            return null;
-        }
     }
 
     /**
