@@ -37,7 +37,7 @@ public class HypemPlaylistAdapter {
     /**
      * Get the current popular charts from position 1 to 50.
      *
-     * @return a sorted map with the position (starting at 1 up to 50) of the song as key and the song as value
+     * @return a sorted map with the position (starting at 1 up to 50) of the position as key and the song as value
      */
     public SortedMap<Integer, HypemSong> getCurrentPopularCharts() {
         final SortedMap<Integer, HypemSong> songs = new TreeMap<>();
