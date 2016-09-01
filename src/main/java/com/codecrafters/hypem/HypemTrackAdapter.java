@@ -72,7 +72,7 @@ public class HypemTrackAdapter {
                 // if the song is not hosted on soundcloud we need to request another hypem endpoint
                 final String jsonBody = getHostingServeJsonBody(hypemId);
                 if (StringUtils.isNotBlank(jsonBody)) {
-//                    return extractUrlField(jsonBody);
+                    return extractUrlField(jsonBody);
                 }
             }
         }
@@ -119,6 +119,18 @@ public class HypemTrackAdapter {
             // if this exception occurs we have to improve the - vary naive - parsing
             e.printStackTrace();
             return "";
+        }
+    }
+
+    private Optional<URI> extractUrlField(final String json) {
+        try {
+            final JsonNode mp3ResponseJsonNode = objectMapper.readTree(json);
+            final String url = mp3ResponseJsonNode.get("url").asText();
+            return Optional.of(URI.create(url));
+        } catch (IOException e) {
+            // if this exception occurs we have to improve the - currently very naive - parsing
+            e.printStackTrace();
+            return Optional.empty();
         }
     }
 

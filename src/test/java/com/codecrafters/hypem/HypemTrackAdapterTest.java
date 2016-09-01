@@ -72,25 +72,24 @@ public class HypemTrackAdapterTest {
     @Test
     public void testSongIsNotHosted() {
         final Optional<URI> fileUri = hypemTrackAdapter.getFileUriByHypemId(HYPEM_ID_NO_FILE_SONG);
-        assertThat(fileUri).isNull();
+        assertThat(fileUri.isPresent()).isFalse();
     }
 
     @Test
     public void testSongHostIsForbidden() {
         final Optional<URI> fileUri = hypemTrackAdapter.getFileUriByHypemId(HYPEM_ID_FORBIDDEN_SONG);
-        assertThat(fileUri).isNull();
+        assertThat(fileUri.isPresent()).isFalse();
     }
 
     @Test
     public void testHypemIdIsNullOrEmpty() {
         final Optional<URI> emptyHypemIdUri = hypemTrackAdapter.getFileUriByHypemId("");
-        assertThat(emptyHypemIdUri).isNull();
+        assertThat(emptyHypemIdUri.isPresent()).isFalse();
 
         final Optional<URI> blankHypemIdUri = hypemTrackAdapter.getFileUriByHypemId("       ");
-        assertThat(blankHypemIdUri).isNull();
+        assertThat(blankHypemIdUri.isPresent()).isFalse();
 
         final Optional<URI> nullHypemIdUri = hypemTrackAdapter.getFileUriByHypemId(null);
-        assertThat(nullHypemIdUri).isNull();
+        assertThat(nullHypemIdUri.isPresent()).isFalse();
     }
-
 }
