@@ -10,8 +10,11 @@ buildscript {
     }
 }
 
-apply plugin: 'java'
-apply plugin: 'eclipse'
+plugins {
+    id 'java'
+    id 'eclipse'
+    id 'com.gradle.build-scan' version '1.0'
+}
 apply plugin: 'spring-boot'
 
 jar {
@@ -41,6 +44,10 @@ dependencies {
             'com.google.truth:truth:0.29'
 }
 
+buildScan {
+    licenseAgreementUrl = 'https://gradle.com/terms-of-service'
+    licenseAgree = 'yes'
+}
 
 eclipse {
     classpath {
