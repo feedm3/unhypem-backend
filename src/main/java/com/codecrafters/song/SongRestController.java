@@ -5,21 +5,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Fabian Dietenberger
  */
 @RestController
-public class SongRestController {
-
-    @RequestMapping("/popular")
-    public List<Song> getPopularSongs() {
-        final List<Song> songs = new ArrayList<>();
-        songs.add(new Song());
-        return songs;
-    }
+class SongRestController {
 
     @RequestMapping("/song/{id}")
     public Song getSong(@PathVariable final String id) {
