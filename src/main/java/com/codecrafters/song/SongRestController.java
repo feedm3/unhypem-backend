@@ -1,4 +1,4 @@
-package com.codecrafters;
+package com.codecrafters.song;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import org.springframework.web.bind.annotation.PathVariable;

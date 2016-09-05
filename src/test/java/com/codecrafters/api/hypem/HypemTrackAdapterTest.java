@@ -1,4 +1,4 @@
-package com.codecrafters.hypem;
+package com.codecrafters.api.hypem;
 
 import org.junit.Test;
 import org.springframework.web.client.RestTemplate;

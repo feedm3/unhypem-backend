@@ -1,4 +1,4 @@
-package com.codecrafters.hypem;
+package com.codecrafters.api.hypem;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;

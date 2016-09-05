@@ -1,4 +1,4 @@
-package com.codecrafters;
+package com.codecrafters.song;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
