@@ -1,5 +1,7 @@
 package com.codecrafters.song;
 
+import com.codecrafters.api.hypem.HypemSong;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -24,6 +26,15 @@ public class Song {
     private String waveformUrl;
 
     public Song() {
+    }
+
+    public static Song from(final HypemSong hypemSong) {
+        final Song song = new Song();
+        song.setArtist(hypemSong.getArtist());
+        song.setTitle(hypemSong.getTitle());
+        song.setHypemMediaId(hypemSong.getMediaid());
+        song.setHypemLovedCount(hypemSong.getLovedCount());
+        return song;
     }
 
     public long getId() {
