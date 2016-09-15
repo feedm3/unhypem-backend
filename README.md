@@ -22,3 +22,18 @@ To start all test use
 ```
 gradlew test
 ```
+
+#### Outdated dependencies
+
+To check for outdated dependencies
+```
+gradlew dependencyUpdates -Drevision=release
+```
+
+#### Vulnerabilities
+
+To check for vulnerabilities in the dependencies run
+```
+gradlew dependencyCheck --info
+```
+The reports will be generated automatically under `build/reports` folder
