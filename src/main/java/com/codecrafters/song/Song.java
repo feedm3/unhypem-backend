@@ -2,22 +2,21 @@ package com.codecrafters.song;
 
 import com.codecrafters.api.hypem.HypemSong;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * @author Fabian Dietenberger
  */
 @Entity
+@Table(indexes = {@Index(name = "hypemMediaIdIndex", columnList = "hypemMediaId")})
 public class Song {
 
-    @Id
-    @GeneratedValue
-    private long id;
-    private String artist;
-    private String title;
+    @EmbeddedId
+    private SongId songId;
+
     private int durationInSeconds;
+
+    @Column(unique = true)
     private String hypemMediaId;
     private long hypemLovedCount;
     private String streamUrl;
@@ -26,6 +25,7 @@ public class Song {
     private String waveformUrl;
 
     public Song() {
+        songId = new SongId();
     }
 
     public static Song from(final HypemSong hypemSong) {
@@ -37,28 +37,20 @@ public class Song {
         return song;
     }
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(final long id) {
-        this.id = id;
-    }
-
     public String getArtist() {
-        return artist;
+        return songId.getArtist();
     }
 
     public void setArtist(final String artist) {
-        this.artist = artist;
+        songId.setArtist(artist);
     }
 
     public String getTitle() {
-        return title;
+        return songId.getTitle();
     }
 
     public void setTitle(final String title) {
-        this.title = title;
+        songId.setTitle(title);
     }
 
     public int getDurationInSeconds() {
