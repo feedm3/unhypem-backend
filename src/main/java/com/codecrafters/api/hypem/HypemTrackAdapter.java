@@ -21,7 +21,7 @@ import java.util.Optional;
  *
  * @author Fabian Dietenberger
  */
-public class HypemTrackAdapter {
+class HypemTrackAdapter {
 
     private static final String SOUNDCLOUD_HOST_NAME = "soundcloud.com";
 
@@ -35,7 +35,7 @@ public class HypemTrackAdapter {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public HypemTrackAdapter(final RestTemplate restTemplate) {
+    HypemTrackAdapter(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
         this.objectMapper = new ObjectMapper();
         setupRestErrorHandler();
@@ -50,7 +50,7 @@ public class HypemTrackAdapter {
      * @return the media id from the URL or an empty string if the URL is not valid
      * @throws IllegalArgumentException if the hypemTrackUrl is not valid
      */
-    public String getHypemMediaIdFromUrl(final String hypemTrackUrl) {
+    String getHypemMediaIdFromUrl(final String hypemTrackUrl) {
         Preconditions.checkArgument(hypemTrackUrl != null);
         Preconditions.checkArgument(hypemTrackUrl.startsWith(HYPEM_TRACK_URL));
         Preconditions.checkArgument(hypemTrackUrl.split("/").length >= 5);
@@ -63,7 +63,7 @@ public class HypemTrackAdapter {
      * @param hypemId the hypem id to resolve the hosting URL
      * @return the URL to the song or null if the id cannot be resolved
      */
-    public Optional<URI> getFileUriByHypemId(final String hypemId) {
+    Optional<URI> getFileUriByHypemId(final String hypemId) {
         if (StringUtils.isNotBlank(hypemId)) {
             final URI goUrl = getHostingGoUrl(hypemId);
             if (isSoundcloudUrl(goUrl)) {
