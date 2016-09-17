@@ -1,5 +1,6 @@
 package com.codecrafters.song;
 
+import com.codecrafters.testutils.TestSongBuilder;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,9 @@ public class SongRepositoryTest {
     @Autowired
     private SongRepository songRepository;
 
-    private static final String ARTIST = "Artist";
-    private static final String TITLE = "Titls";
-    private static final String HYPEM_MEDIA_ID = "mediaId";
-
     @Test(expected = DataIntegrityViolationException.class)
     public void testArtistMustNoBeNull() {
-        final Song song = getSong();
+        final Song song = TestSongBuilder.getSong();
         song.setArtist(null);
 
         songRepository.saveAndFlush(song);
@@ -31,7 +28,7 @@ public class SongRepositoryTest {
 
     @Test(expected = DataIntegrityViolationException.class)
     public void testTitleMustNoBeNull() {
-        final Song song = getSong();
+        final Song song = TestSongBuilder.getSong();
         song.setTitle(null);
 
         songRepository.saveAndFlush(song);
@@ -39,17 +36,9 @@ public class SongRepositoryTest {
 
     @Test
     public void testFindSongByMediaId() {
-        songRepository.save(getSong());
+        songRepository.save(TestSongBuilder.getSong());
 
-        final Song song = songRepository.findOneByHypemMediaId(HYPEM_MEDIA_ID);
-        assertThat(song.getHypemMediaId()).isEqualTo(HYPEM_MEDIA_ID);
-    }
-
-    private Song getSong() {
-        final Song song = new Song();
-        song.setArtist(ARTIST);
-        song.setTitle(TITLE);
-        song.setHypemMediaId(HYPEM_MEDIA_ID);
-        return song;
+        final Song song = songRepository.findOneByHypemMediaId(TestSongBuilder.HYPEM_MEDIA_ID);
+        assertThat(song.getHypemMediaId()).isEqualTo(TestSongBuilder.HYPEM_MEDIA_ID);
     }
 }
