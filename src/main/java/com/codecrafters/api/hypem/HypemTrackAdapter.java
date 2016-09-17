@@ -1,8 +1,6 @@
 package com.codecrafters.api.hypem;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Preconditions;
+import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
@@ -14,6 +12,8 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Optional;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * This class is used to get the hosting URL of a song on hypem. All you need is the hypem id of the song (the id is
@@ -33,11 +33,9 @@ class HypemTrackAdapter {
     private static final String HYPEM_SERVE_URL = "http://hypem.com/serve/source/";
 
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
 
     HypemTrackAdapter(final RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
-        this.objectMapper = new ObjectMapper();
         setupRestErrorHandler();
     }
 
@@ -51,9 +49,9 @@ class HypemTrackAdapter {
      * @throws IllegalArgumentException if the hypemTrackUrl is not valid
      */
     String getHypemMediaIdFromUrl(final String hypemTrackUrl) {
-        Preconditions.checkArgument(hypemTrackUrl != null);
-        Preconditions.checkArgument(hypemTrackUrl.startsWith(HYPEM_TRACK_URL));
-        Preconditions.checkArgument(hypemTrackUrl.split("/").length >= 5);
+        checkArgument(hypemTrackUrl != null);
+        checkArgument(hypemTrackUrl.startsWith(HYPEM_TRACK_URL));
+        checkArgument(hypemTrackUrl.split("/").length >= 5);
         return hypemTrackUrl.split("/")[4];
     }
 
@@ -112,26 +110,12 @@ class HypemTrackAdapter {
         final String rawSongJson = StringUtils.substringBetween(body, "<script type=\"application/json\" id=\"displayList-data\">", "<script type=\"text/javascript\">");
         final String songJson = StringUtils.trim(rawSongJson);
 
-        try {
-            final JsonNode jsonNode = objectMapper.readTree(songJson);
-            return jsonNode.get("tracks").get(0).get("key").asText();
-        } catch (IOException e) {
-            // if this exception occurs we have to improve the - vary naive - parsing
-            e.printStackTrace();
-            return "";
-        }
+        return JsonPath.read(songJson, "$.tracks[0].key");
     }
 
     private Optional<URI> extractUrlField(final String json) {
-        try {
-            final JsonNode mp3ResponseJsonNode = objectMapper.readTree(json);
-            final String url = mp3ResponseJsonNode.get("url").asText();
-            return Optional.of(URI.create(url));
-        } catch (IOException e) {
-            // if this exception occurs we have to improve the - currently very naive - parsing
-            e.printStackTrace();
-            return Optional.empty();
-        }
+      final String url = JsonPath.read(json, "$.url");
+        return Optional.of(URI.create(url));
     }
 
     private boolean isSoundcloudUrl(final URI fileUri) {
