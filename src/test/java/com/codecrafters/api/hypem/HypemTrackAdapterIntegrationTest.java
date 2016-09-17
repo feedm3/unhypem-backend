@@ -11,7 +11,7 @@ import static com.google.common.truth.Truth.assertThat;
 /**
  * @author Fabian Dietenberger
  */
-public class HypemTrackAdapterTest {
+public class HypemTrackAdapterIntegrationTest {
 
     private static final String HYPEM_URL_SOUNDCLOUD_SONG = "http://hypem.com/track/2c87x";
 

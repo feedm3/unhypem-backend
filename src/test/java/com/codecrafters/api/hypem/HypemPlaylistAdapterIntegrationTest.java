@@ -10,7 +10,7 @@ import static com.google.common.truth.Truth.assertThat;
 /**
  * @author Fabian Dietenberger
  */
-public class HypemPlaylistAdapterTest {
+public class HypemPlaylistAdapterIntegrationTest {
 
     private final HypemPlaylistAdapter chartsAdapter = new HypemPlaylistAdapter(new RestTemplate());
 
