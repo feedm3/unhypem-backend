@@ -75,7 +75,7 @@ public class HypemPlaylistAdapter {
 
     private Pair<Integer, HypemSong> getPositionAndSongFromJson(final Map.Entry<String, JsonNode> positionSongEntry) {
         if (NumberUtils.isNumber(positionSongEntry.getKey())) {
-            final HypemSong hypemSong = getSongFromJson(positionSongEntry.getValue().asText());
+            final HypemSong hypemSong = getSongFromJson(positionSongEntry.getValue().toString());
             final int position = Integer.parseInt(positionSongEntry.getKey());
             return Pair.of(position, hypemSong);
         }
@@ -83,7 +83,12 @@ public class HypemPlaylistAdapter {
     }
 
     private HypemSong getSongFromJson(final String songJson) {
-        return objectMapper.convertValue(songJson, HypemSong.class);
+        try {
+            return objectMapper.readValue(songJson, HypemSong.class);
+        } catch (final IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     private String requestPlaylistJson(final String playlistUrl) {

@@ -38,7 +38,7 @@ class HypemTrackAdapter {
         this.restTemplate = restTemplate;
         setupRestErrorHandler();
     }
-
+    
     /**
      * Get the hypem id from a hypem track URL. This function simply extracts the id from the URL.
      * <p>
@@ -114,7 +114,7 @@ class HypemTrackAdapter {
     }
 
     private Optional<URI> extractUrlField(final String json) {
-      final String url = JsonPath.read(json, "$.url");
+        final String url = JsonPath.read(json, "$.url");
         return Optional.of(URI.create(url));
     }
 
