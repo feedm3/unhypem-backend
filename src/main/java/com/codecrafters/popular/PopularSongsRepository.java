@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
  * @author Fabian Dietenberger
  */
 @Repository
-public interface PopularSongsRepository extends JpaRepository<PopularSongs, Long> {
+interface PopularSongsRepository extends JpaRepository<PopularSongs, Long> {
 
     PopularSongs findFirstByOrderByTimestampAsc();
 }
