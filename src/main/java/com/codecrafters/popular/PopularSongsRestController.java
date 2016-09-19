@@ -4,21 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * @author Fabian Dietenberger
- */
-@RestController
-public class PopularSongsRestController {
 
-    private final PopularSongsRepository popularSongsRepository;
+@RestController
+class PopularSongsRestController {
+
+    private final PopularSongsService popularSongsService;
 
     @Autowired
-    public PopularSongsRestController(final PopularSongsRepository popularSongsRepository) {
-        this.popularSongsRepository = popularSongsRepository;
+    public PopularSongsRestController(final PopularSongsService popularSongsService) {
+        this.popularSongsService = popularSongsService;
     }
 
     @RequestMapping("/popular")
     public PopularSongs getPopularSongs() {
-        return popularSongsRepository.findFirstByOrderByTimestampAsc();
+        return popularSongsService.getPopularSongs();
     }
 }

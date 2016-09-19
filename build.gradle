@@ -37,6 +37,7 @@ task wrapper(type: Wrapper) {
 dependencies {
     compile 'org.springframework.boot:spring-boot-starter-data-jpa',
             'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-cache',
             'org.apache.commons:commons-lang3:3.4',
             'com.google.guava:guava:19.0',
             'com.jayway.jsonpath:json-path:2.2.0'

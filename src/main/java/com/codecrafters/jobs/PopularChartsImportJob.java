@@ -3,7 +3,7 @@ package com.codecrafters.jobs;
 import com.codecrafters.api.hypem.HypemPlaylistAdapter;
 import com.codecrafters.api.hypem.HypemSong;
 import com.codecrafters.popular.PopularSongs;
-import com.codecrafters.popular.PopularSongsRepository;
+import com.codecrafters.popular.PopularSongsService;
 import com.codecrafters.song.Song;
 import com.codecrafters.song.SongRepository;
 import org.slf4j.Logger;
@@ -24,13 +24,13 @@ class PopularChartsImportJob {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PopularChartsImportJob.class);
 
-    private final PopularSongsRepository repository;
+    private final PopularSongsService popularSongsService;
     private final SongRepository songRepository;
     private final HypemPlaylistAdapter hypemPlaylistAdapter;
 
     @Autowired
-    public PopularChartsImportJob(final PopularSongsRepository repository, final SongRepository songRepository, final HypemPlaylistAdapter hypemPlaylistAdapter) {
-        this.repository = repository;
+    public PopularChartsImportJob(final PopularSongsService popularSongsService, final SongRepository songRepository, final HypemPlaylistAdapter hypemPlaylistAdapter) {
+        this.popularSongsService = popularSongsService;
         this.songRepository = songRepository;
         this.hypemPlaylistAdapter = hypemPlaylistAdapter;
     }
@@ -50,7 +50,7 @@ class PopularChartsImportJob {
         final PopularSongs popularSongs = new PopularSongs();
         popularSongs.setSongs(resultCharts);
         popularSongs.setTimestamp(LocalDateTime.now());
-        repository.save(popularSongs);
+        popularSongsService.savePopularSongs(popularSongs);
         LOGGER.info("Finished importing new popular charts");
     }
 }
