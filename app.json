@@ -1,0 +1,28 @@
+{
+  "name": "unhypem-boot",
+  "scripts": {},
+  "env": {
+    "spring.datasource.password": {
+      "required": true
+    },
+    "spring.datasource.url": {
+      "required": true
+    },
+    "spring.datasource.username": {
+      "required": true
+    }
+  },
+  "formation": {
+    "web": {
+      "quantity": 1
+    }
+  },
+  "addons": [
+    "heroku-postgresql"
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/gradle"
+    }
+  ]
+}
