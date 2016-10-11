@@ -20,7 +20,7 @@ plugins {
 apply plugin: 'spring-boot'
 
 jar {
-    baseName = artifact
+    baseName = artifactId
     version = version
 }
 
