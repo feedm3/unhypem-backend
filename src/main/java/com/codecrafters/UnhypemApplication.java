@@ -1,6 +1,6 @@
 package com.codecrafters;
 
-import com.codecrafters.api.hypem.HypemPlaylistAdapter;
+import com.codecrafters.api.hypem.HypemApi;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -10,7 +10,6 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.web.client.RestTemplate;
 
 import java.net.InetAddress;
 
@@ -36,12 +35,7 @@ public class UnhypemApplication {
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
-
-    @Bean
-    public HypemPlaylistAdapter hypemPlaylistAdapter() {
-        return new HypemPlaylistAdapter(restTemplate());
+    public HypemApi hypemApi() {
+        return new HypemApi();
     }
 }

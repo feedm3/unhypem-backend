@@ -38,7 +38,7 @@ class HypemTrackAdapter {
         this.restTemplate = restTemplate;
         setupRestErrorHandler();
     }
-    
+
     /**
      * Get the hypem id from a hypem track URL. This function simply extracts the id from the URL.
      * <p>

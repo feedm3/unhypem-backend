@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  *
  * @author Fabian Dietenberger
  */
-public class HypemPlaylistAdapter {
+class HypemPlaylistAdapter {
 
     private static final String HYPEM_API_VERSION = "1.1";
 
@@ -31,17 +31,18 @@ public class HypemPlaylistAdapter {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
-    public HypemPlaylistAdapter(final RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    HypemPlaylistAdapter() {
+        this.restTemplate = new RestTemplate();
         this.objectMapper = new ObjectMapper();
     }
+
 
     /**
      * Get the current popular charts from position 1 to 50.
      *
-     * @return a sorted map with the position (starting at 1 up to 50) of the position as key and the song as value
+     * @return a sorted map with the position (starting at 1 up to 50) as key and the song as value
      */
-    public SortedMap<Integer, HypemSong> getCurrentPopularCharts() {
+    SortedMap<Integer, HypemSong> getCurrentPopularCharts() {
         final SortedMap<Integer, HypemSong> songs = new TreeMap<>();
         songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(HYPEM_CHARTS_1_TO_20_URL, 1));
         songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(HYPEM_CHARTS_21_TO_40_URL, 21));
