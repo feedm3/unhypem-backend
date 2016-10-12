@@ -20,7 +20,7 @@ import static com.google.common.base.Preconditions.checkArgument;
  *
  * @author Fabian Dietenberger
  */
-class HypemPlaylistAdapter {
+/* package */ class HypemPlaylistAdapter {
 
     private static final String HYPEM_API_VERSION = "1.1";
 
@@ -37,7 +37,7 @@ class HypemPlaylistAdapter {
      *
      * @return a sorted map with the position (starting at 1 up to 50) as key and the song as value
      */
-    SortedMap<Integer, HypemSong> getPlaylist(final HypemPlaylist playlist) {
+    /* package */ SortedMap<Integer, HypemSong> getPlaylist(final HypemPlaylist playlist) {
         final SortedMap<Integer, HypemSong> songs = new TreeMap<>();
         songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition1To20(), 1));
         songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition21To40(), 21));
