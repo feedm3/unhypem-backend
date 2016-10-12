@@ -41,7 +41,7 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-cache',
             'org.springframework.boot:spring-boot-starter-actuator',
             'org.apache.commons:commons-lang3:3.4',
-            'com.google.guava:guava:19.0',
+            'com.google.guava:guava:20.0-rc1',
             'com.jayway.jsonpath:json-path:2.2.0'
 
     runtime 'org.postgresql:postgresql',
