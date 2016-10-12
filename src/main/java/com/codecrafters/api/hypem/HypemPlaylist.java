@@ -8,8 +8,7 @@ public enum HypemPlaylist {
     POPULAR_NOW("3day"),
     POPULAR_LAST_WEEK("lastweek"),
     POPULAR_REMIXES("remix"),
-    POPULAR_NO_REMIXES("noremix"),
-    POPULAR_ARTISTS("artists");
+    POPULAR_NO_REMIXES("noremix");
 
     private static final String POSITION_1_TO_20_URL_FORMAT = "http://hypem.com/playlist/popular/%s/json/1";
     private static final String POSITION_21_TO_40_URL_FORMAT = "http://hypem.com/playlist/popular/%s/json/2";

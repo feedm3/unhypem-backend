@@ -24,10 +24,6 @@ class HypemPlaylistAdapter {
 
     private static final String HYPEM_API_VERSION = "1.1";
 
-    private static final String HYPEM_CHARTS_1_TO_20_URL = "http://hypem.com/playlist/popular/3day/json/1";
-    private static final String HYPEM_CHARTS_21_TO_40_URL = "http://hypem.com/playlist/popular/3day/json/2";
-    private static final String HYPEM_CHARTS_41_TO_50_URL = "http://hypem.com/playlist/popular/3day/json/3";
-
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
 
@@ -36,17 +32,16 @@ class HypemPlaylistAdapter {
         this.objectMapper = new ObjectMapper();
     }
 
-
     /**
      * Get the current popular charts from position 1 to 50.
      *
      * @return a sorted map with the position (starting at 1 up to 50) as key and the song as value
      */
-    SortedMap<Integer, HypemSong> getCurrentPopularCharts() {
+    SortedMap<Integer, HypemSong> getPlaylist(final HypemPlaylist playlist) {
         final SortedMap<Integer, HypemSong> songs = new TreeMap<>();
-        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(HYPEM_CHARTS_1_TO_20_URL, 1));
-        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(HYPEM_CHARTS_21_TO_40_URL, 21));
-        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(HYPEM_CHARTS_41_TO_50_URL, 41));
+        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition1To20(), 1));
+        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition21To40(), 21));
+        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition41To50(), 41));
         return songs;
     }
 
