@@ -56,7 +56,6 @@ public class HypemTrackAdapterIntegrationTest {
         hypemTrackAdapter.getHypemMediaIdFromUrl("http://hypem.com/track/");
     }
 
-
     @Test
     public void testGetSoundcloudUrlFromHypemId() {
         final Optional<URI> fileUri = hypemTrackAdapter.getFileUriByHypemId(HYPEM_ID_SOUNDCLOUD_SONG);
