@@ -110,7 +110,11 @@ import static com.google.common.base.Preconditions.checkArgument;
         final String rawSongJson = StringUtils.substringBetween(body, "<script type=\"application/json\" id=\"displayList-data\">", "<script type=\"text/javascript\">");
         final String songJson = StringUtils.trim(rawSongJson);
 
-        return JsonPath.read(songJson, "$.tracks[0].key");
+        try {
+            return JsonPath.read(songJson, "$.tracks[0].key");
+        } catch (final Exception e) {
+            return "";
+        }
     }
 
     private Optional<URI> extractUrlField(final String json) {
