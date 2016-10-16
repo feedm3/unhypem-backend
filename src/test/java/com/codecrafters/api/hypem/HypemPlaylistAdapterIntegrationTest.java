@@ -29,6 +29,16 @@ public class HypemPlaylistAdapterIntegrationTest {
 
 
     @Test
+    public void requetsCharts() {
+        final RestTemplate restTemplate = new RestTemplate();
+
+        final RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, URI.create("http://hypem.com/playlist/popular/3day/json/1"));
+        final ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
+
+        assertThat(exchange.getStatusCode()).isEquivalentAccordingToCompareTo(HttpStatus.OK);
+    }
+
+    @Test
     public void requestHypem() {
         final RestTemplate restTemplate = new RestTemplate();
 
