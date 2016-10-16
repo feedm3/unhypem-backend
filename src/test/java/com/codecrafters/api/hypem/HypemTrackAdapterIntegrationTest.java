@@ -59,12 +59,14 @@ public class HypemTrackAdapterIntegrationTest {
     @Test
     public void testGetSoundcloudUrlFromHypemId() {
         final Optional<URI> fileUri = hypemTrackAdapter.getFileUriByHypemId(HYPEM_ID_SOUNDCLOUD_SONG);
+        assertThat(fileUri.isPresent()).isTrue();
         assertThat(fileUri.get().getHost()).isEqualTo("soundcloud.com");
     }
 
     @Test
     public void testGetMp3UrlFromHypemId() {
         final Optional<URI> fileUri = hypemTrackAdapter.getFileUriByHypemId(HYPEM_ID_MP3_SONG);
+        assertThat(fileUri.isPresent()).isTrue();
         assertThat(fileUri.get().getPath()).endsWith(".mp3");
     }
 
