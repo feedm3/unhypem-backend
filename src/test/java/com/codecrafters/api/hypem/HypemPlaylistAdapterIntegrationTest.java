@@ -1,7 +1,13 @@
 package com.codecrafters.api.hypem;
 
 import org.junit.Test;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
 import java.util.SortedMap;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -10,6 +16,27 @@ import static com.google.common.truth.Truth.assertThat;
 public class HypemPlaylistAdapterIntegrationTest {
 
     private final HypemPlaylistAdapter chartsAdapter = new HypemPlaylistAdapter();
+
+    @Test
+    public void requestGoogle() {
+        final RestTemplate restTemplate = new RestTemplate();
+
+        final RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, URI.create("http://google.com"));
+        final ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
+
+        assertThat(exchange.getStatusCode()).isEquivalentAccordingToCompareTo(HttpStatus.OK);
+    }
+
+
+    @Test
+    public void requestHypem() {
+        final RestTemplate restTemplate = new RestTemplate();
+
+        final RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, URI.create("http://hypem.com"));
+        final ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
+
+        assertThat(exchange.getStatusCode()).isEquivalentAccordingToCompareTo(HttpStatus.OK);
+    }
 
     @Test
     public void testPopularNow() {
