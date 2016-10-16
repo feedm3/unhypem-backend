@@ -33,6 +33,8 @@ public class HypemPlaylistAdapterIntegrationTest {
         final RestTemplate restTemplate = new RestTemplate();
 
         final RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, URI.create("http://hypem.com/playlist/popular/3day/json/1"));
+        requestEntity.getHeaders().add("AUTH", "03:95e416f279a4f69d206c4786c7fb3fd6:1435915799:1050385043:12-DE");
+
         final ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
 
         assertThat(exchange.getStatusCode()).isEquivalentAccordingToCompareTo(HttpStatus.OK);
@@ -43,6 +45,8 @@ public class HypemPlaylistAdapterIntegrationTest {
         final RestTemplate restTemplate = new RestTemplate();
 
         final RequestEntity requestEntity = new RequestEntity(HttpMethod.GET, URI.create("http://hypem.com"));
+
+        requestEntity.getHeaders().add("AUTH", "03:95e416f279a4f69d206c4786c7fb3fd6:1435915799:1050385043:12-DE");
         final ResponseEntity<String> exchange = restTemplate.exchange(requestEntity, String.class);
 
         assertThat(exchange.getStatusCode()).isEquivalentAccordingToCompareTo(HttpStatus.OK);
