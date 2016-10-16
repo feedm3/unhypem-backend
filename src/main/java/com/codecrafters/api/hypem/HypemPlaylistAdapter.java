@@ -96,8 +96,9 @@ import static com.google.common.base.Preconditions.checkArgument;
         try {
             final ResponseEntity<String> playlistResponse = restTemplate.exchange(playlistRequest, String.class);
             return playlistResponse.getBody();
-        } catch (HttpClientErrorException e) {
-            throw new HttpClientErrorException(e.getStatusCode(), "Could not request " + playlistUrl + ". " + e.getMessage());
+        } catch (final HttpClientErrorException e) {
+            throw new HttpClientErrorException(e.getStatusCode(), "Could not request " + playlistRequest.getUrl() +
+                    ". Headers: " + playlistRequest.getHeaders() + ". " + e.getMessage());
         }
     }
 
