@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
@@ -91,10 +92,13 @@ import static com.google.common.base.Preconditions.checkArgument;
     }
 
     private String requestPlaylistJson(final String playlistUrl) {
-        LOG.error("Requesting: {}", playlistUrl);
         final RequestEntity<Void> playlistRequest = RequestEntity.get(URI.create(playlistUrl)).build();
-        final ResponseEntity<String> playlistResponse = restTemplate.exchange(playlistRequest, String.class);
-        return playlistResponse.getBody();
+        try {
+            final ResponseEntity<String> playlistResponse = restTemplate.exchange(playlistRequest, String.class);
+            return playlistResponse.getBody();
+        } catch (HttpClientErrorException e) {
+            throw new HttpClientErrorException(e.getStatusCode(), "Could not request " + playlistUrl + ". " + e.getMessage());
+        }
     }
 
     private JsonNode convertJsonToJsonNode(final String json) {
