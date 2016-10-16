@@ -32,7 +32,7 @@ public class HypemTrackAdapterIntegrationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void convertUrlToIdShouldThrowExceptionWhenParameterIsSurroundedByWhitespace () {
+    public void convertUrlToIdShouldThrowExceptionWhenParameterIsSurroundedByWhitespace() {
         hypemTrackAdapter.getHypemMediaIdFromUrl("    " + HYPEM_URL_SOUNDCLOUD_SONG + "  ");
     }
 

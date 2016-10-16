@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
@@ -23,6 +25,7 @@ import static com.google.common.base.Preconditions.checkArgument;
 /* package */ class HypemPlaylistAdapter {
 
     private static final String HYPEM_API_VERSION = "1.1";
+    private static final Logger LOG = LoggerFactory.getLogger(HypemPlaylistAdapter.class);
 
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
@@ -88,6 +91,7 @@ import static com.google.common.base.Preconditions.checkArgument;
     }
 
     private String requestPlaylistJson(final String playlistUrl) {
+        LOG.error("Requesting: {}", playlistUrl);
         final RequestEntity<Void> playlistRequest = RequestEntity.get(URI.create(playlistUrl)).build();
         final ResponseEntity<String> playlistResponse = restTemplate.exchange(playlistRequest, String.class);
         return playlistResponse.getBody();
