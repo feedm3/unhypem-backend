@@ -10,9 +10,9 @@ public enum HypemPlaylist {
     POPULAR_REMIXES("remix"),
     POPULAR_NO_REMIXES("noremix");
 
-    private static final String POSITION_1_TO_20_URL_FORMAT = "http://hypem.com/playlist/popular/%s/json/1";
-    private static final String POSITION_21_TO_40_URL_FORMAT = "http://hypem.com/playlist/popular/%s/json/2";
-    private static final String POSITION_41_TO_50_URL_FORMAT = "http://hypem.com/playlist/popular/%s/json/3";
+    private static final String POSITION_1_TO_20_URL_FORMAT = "http://52.57.223.70/hypem/playlist/popular/%s/json/1";
+    private static final String POSITION_21_TO_40_URL_FORMAT = "http://52.57.223.70/hypem/playlist/popular/%s/json/2";
+    private static final String POSITION_41_TO_50_URL_FORMAT = "http://52.57.223.70/hypem/playlist/popular/%s/json/3";
 
     private final String pathName;
 
