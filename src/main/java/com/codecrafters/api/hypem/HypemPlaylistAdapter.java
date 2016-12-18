@@ -5,12 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.*;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -37,11 +37,11 @@ import static com.google.common.base.Preconditions.checkArgument;
      *
      * @return a sorted map with the position (starting at 1 up to 50) as key and the song as value
      */
-    /* package */ SortedMap<Integer, HypemSong> getPlaylist(final HypemPlaylist playlist) {
+    /* package */ SortedMap<Integer, HypemSong> getPlaylist(final HypemPlaylistUrl playlist) {
         final SortedMap<Integer, HypemSong> songs = new TreeMap<>();
-        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition1To20(), 1));
-        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition21To40(), 21));
-        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getUrlForPosition41To50(), 41));
+        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getHypemPlaylistUrlPosition1To20(), 1));
+        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getHypemPlaylistUrlPosition21To40(), 21));
+        songs.putAll(getSongsFromPlaylistUrlWithPositionOffset(playlist.getHypemPlaylistUrlPosition41To50(), 41));
         return songs;
     }
 
@@ -70,7 +70,7 @@ import static com.google.common.base.Preconditions.checkArgument;
     }
 
     private Pair<Integer, HypemSong> getPositionAndSongFromJson(final Map.Entry<String, JsonNode> positionSongEntry) {
-        if (NumberUtils.isNumber(positionSongEntry.getKey())) {
+        if (NumberUtils.isCreatable(positionSongEntry.getKey())) {
             final HypemSong hypemSong = getSongFromJson(positionSongEntry.getValue().toString());
             final int position = Integer.parseInt(positionSongEntry.getKey());
             return Pair.of(position, hypemSong);
@@ -88,7 +88,7 @@ import static com.google.common.base.Preconditions.checkArgument;
     }
 
     private String requestPlaylistJson(final String playlistUrl) {
-        final RequestEntity<Void> playlistRequest = RequestEntity.get(URI.create(playlistUrl)).build();
+        final RequestEntity<Void> playlistRequest = HypemRequestEntity.to(HttpMethod.GET, playlistUrl);
         final ResponseEntity<String> playlistResponse = restTemplate.exchange(playlistRequest, String.class);
         return playlistResponse.getBody();
     }

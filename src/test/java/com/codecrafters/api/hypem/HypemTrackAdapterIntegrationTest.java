@@ -16,8 +16,8 @@ public class HypemTrackAdapterIntegrationTest {
     private static final String HYPEM_URL_SOUNDCLOUD_SONG = "http://hypem.com/track/2c87x";
 
     private static final String HYPEM_ID_SOUNDCLOUD_SONG = "2c87x";
-    private static final String HYPEM_ID_MP3_SONG = "2c2k1";
-    private static final String HYPEM_ID_NO_FILE_SONG = "2c96b";
+    private static final String HYPEM_ID_MP3_SONG = "2kaet";
+    private static final String HYPEM_ID_NO_FILE_SONG = "21c8w";
     private static final String HYPEM_ID_FORBIDDEN_SONG = "2ey1t";
 
     private final HypemTrackAdapter hypemTrackAdapter = new HypemTrackAdapter(new RestTemplate());
@@ -32,7 +32,7 @@ public class HypemTrackAdapterIntegrationTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void convertUrlToIdShouldThrowExceptionWhenParameterIsSurroundedByWhitespace () {
+    public void convertUrlToIdShouldThrowExceptionWhenParameterIsSurroundedByWhitespace() {
         hypemTrackAdapter.getHypemMediaIdFromUrl("    " + HYPEM_URL_SOUNDCLOUD_SONG + "  ");
     }
 

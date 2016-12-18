@@ -14,7 +14,7 @@ import static org.mockito.Mockito.verify;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest
+@SpringBootTest()
 public class PopularSongsServiceIntegrationTest {
 
     @Autowired

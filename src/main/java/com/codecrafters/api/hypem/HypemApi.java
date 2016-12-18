@@ -21,7 +21,7 @@ public class HypemApi {
      * @param playlist the playlist to get
      * @return a sorted map with the position (starting at 1 up to 50) as key and the song as value
      */
-    public SortedMap<Integer, HypemSong> getPlaylist(final HypemPlaylist playlist) {
+    public SortedMap<Integer, HypemSong> getPlaylist(final HypemPlaylistUrl playlist) {
         checkArgument(playlist != null);
         return hypemPlaylistAdapter.getPlaylist(playlist);
     }

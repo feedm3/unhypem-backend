@@ -2,6 +2,7 @@ package com.codecrafters.api.hypem;
 
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 /* package */ class HypemTrackAdapter {
 
     private static final String SOUNDCLOUD_HOST_NAME = "soundcloud.com";
-
-    // all requests need the same cookie because hypem will generate a key with it
-    private static final String HYPEM_AUTH_COOKIE = "AUTH=03:95e416f279a4f69d206c4786c7fb3fd6:1435915799:1527019462:10-DE";
 
     private static final String HYPEM_TRACK_URL = "http://hypem.com/track/";
     private static final String HYPEM_GO_URL = "http://hypem.com/go/sc/";
@@ -78,14 +76,14 @@ import static com.google.common.base.Preconditions.checkArgument;
     }
 
     private URI getHostingGoUrl(final String hypemId) {
-        final RequestEntity<Void> requestEntity = RequestEntity.head(URI.create(HYPEM_GO_URL + hypemId)).build();
+        final RequestEntity<Void> requestEntity = HypemRequestEntity.to(HttpMethod.HEAD, HYPEM_GO_URL + hypemId);
         final ResponseEntity<Void> exchange = restTemplate.exchange(requestEntity, Void.class);
         return exchange.getHeaders().getLocation();
     }
 
     private String getHostingServeJsonBody(final String hypemId) {
         final String key = getTrackUrlAccessKey(hypemId);
-        final RequestEntity<Void> mp3Request = RequestEntity.get(URI.create(HYPEM_SERVE_URL + hypemId + "/" + key)).header("Cookie", HYPEM_AUTH_COOKIE).build();
+        final RequestEntity<Void> mp3Request = HypemRequestEntity.to(HttpMethod.GET, HYPEM_SERVE_URL + hypemId + "/" + key);
         final ResponseEntity<String> mp3Response = restTemplate.exchange(mp3Request, String.class);
 
         if (mp3Response.getStatusCode() == HttpStatus.OK) {
@@ -103,7 +101,7 @@ import static com.google.common.base.Preconditions.checkArgument;
      * @return the key
      */
     private String getTrackUrlAccessKey(final String hypemId) {
-        final RequestEntity<Void> hypemKeyRequest = RequestEntity.get(URI.create(HYPEM_TRACK_URL + hypemId)).header("Cookie", HYPEM_AUTH_COOKIE).build();
+        final RequestEntity<Void> hypemKeyRequest = HypemRequestEntity.to(HttpMethod.GET, HYPEM_TRACK_URL + hypemId);
         final ResponseEntity<String> hypemKeyResponse = restTemplate.exchange(hypemKeyRequest, String.class);
 
         final String body = hypemKeyResponse.getBody();

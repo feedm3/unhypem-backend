@@ -1,7 +1,8 @@
 package com.codecrafters.jobs;
 
 import com.codecrafters.api.hypem.HypemApi;
-import com.codecrafters.api.hypem.HypemPlaylist;
+import com.codecrafters.api.hypem.HypemConfiguration;
+import com.codecrafters.api.hypem.HypemPlaylistUrl;
 import com.codecrafters.api.hypem.HypemSong;
 import com.codecrafters.popular.PopularSongs;
 import com.codecrafters.popular.PopularSongsService;
@@ -28,18 +29,20 @@ class PopularChartsImportJob {
     private final PopularSongsService popularSongsService;
     private final SongRepository songRepository;
     private final HypemApi hypemApi;
+    private final HypemConfiguration hypemConfiguration;
 
     @Autowired
-    public PopularChartsImportJob(final PopularSongsService popularSongsService, final SongRepository songRepository, final HypemApi hypemApi) {
+    public PopularChartsImportJob(final PopularSongsService popularSongsService, final SongRepository songRepository, final HypemApi hypemApi, final HypemConfiguration hypemConfiguration) {
         this.popularSongsService = popularSongsService;
         this.songRepository = songRepository;
         this.hypemApi = hypemApi;
+        this.hypemConfiguration = hypemConfiguration;
     }
 
     @Scheduled(fixedRateString = "${unhypem.import.interval-in-millis}")
     public void importCurrentPopularCharts() {
         LOGGER.info("Start importing new popular charts");
-        final SortedMap<Integer, HypemSong> popularNowPlaylist = hypemApi.getPlaylist(HypemPlaylist.POPULAR_NOW);
+        final SortedMap<Integer, HypemSong> popularNowPlaylist = hypemApi.getPlaylist(new HypemPlaylistUrl(HypemPlaylistUrl.Type.POPULAR_NOW, hypemConfiguration));
 
         final SortedMap<Integer, Song> resultCharts = new TreeMap<>();
         popularNowPlaylist.forEach((position, hypemSong) -> {

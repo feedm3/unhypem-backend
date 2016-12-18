@@ -1,11 +1,8 @@
 package com.codecrafters.api.hypem;
 
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Value;
 
-/**
- *
- */
+
 public class HypemPlaylistUrl {
 
     public enum Type {
@@ -25,18 +22,11 @@ public class HypemPlaylistUrl {
         }
     }
 
-    private final String PATH_TEMPLATE_POSITION_1_TO_20 = "/playlist/popular/%s/json/1";
-    private final String PATH_TEMPLATE_POSITION_21_TO_40 = "/playlist/popular/%s/json/2";
-    private final String PATH_TEMPLATE_POSITION_41_TO_50 = "/playlist/popular/%s/json/3";
+    private final String PATH_TEMPLATE_POSITION_1_TO_20 = "/playlist/popular/%s/json/1/data.js";
+    private final String PATH_TEMPLATE_POSITION_21_TO_40 = "/playlist/popular/%s/json/2/data.js";
+    private final String PATH_TEMPLATE_POSITION_41_TO_50 = "/playlist/popular/%s/json/3/data.js";
 
-    @Value("${hypem.protocol}")
-    private String hypemProtocol;
-
-    @Value("${hypem.host}")
-    private String hypemHost;
-
-    @Value("${hypem.key}")
-    private String hypemKey;
+    private final HypemConfiguration configuration;
 
     private final Type type;
 
@@ -44,12 +34,13 @@ public class HypemPlaylistUrl {
     private final String hypemPlaylistUrlPosition21To40;
     private final String hypemPlaylistUrlPosition41To50;
 
-    public HypemPlaylistUrl(final Type type) {
+    public HypemPlaylistUrl(final Type type, final HypemConfiguration hypemConfiguration) {
         this.type = type;
+        this.configuration = hypemConfiguration;
 
-        hypemPlaylistUrlPosition1To20 = hypemProtocol + "://" + hypemHost + getPathForPosition1To20() + getKeyParam();
-        hypemPlaylistUrlPosition21To40 = hypemProtocol + "://" + hypemHost + getPathForPosition21To40() + getKeyParam();
-        hypemPlaylistUrlPosition41To50 = hypemProtocol + "://" + hypemHost + getPathForPosition41To50() + getKeyParam();
+        hypemPlaylistUrlPosition1To20 = configuration.getHypemProtocol() + "://" + configuration.getHypemHost() + getPathForPosition1To20() + getKeyParam();
+        hypemPlaylistUrlPosition21To40 = configuration.getHypemProtocol() + "://" + configuration.getHypemHost() + getPathForPosition21To40() + getKeyParam();
+        hypemPlaylistUrlPosition41To50 = configuration.getHypemProtocol() + "://" + configuration.getHypemHost() + getPathForPosition41To50() + getKeyParam();
     }
 
     /* package */ String getHypemPlaylistUrlPosition1To20() {
@@ -77,10 +68,9 @@ public class HypemPlaylistUrl {
     }
 
     private String getKeyParam() {
-        if (StringUtils.isNotBlank(hypemKey)) {
-            return "?key=" + hypemKey;
+        if (StringUtils.isNotBlank(configuration.getHypemKey())) {
+            return "?key=" + configuration.getHypemKey();
         }
         return "";
     }
-
 }
