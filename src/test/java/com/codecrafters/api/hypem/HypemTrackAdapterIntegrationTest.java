@@ -1,6 +1,11 @@
 package com.codecrafters.api.hypem;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
@@ -8,9 +13,9 @@ import java.util.Optional;
 
 import static com.google.common.truth.Truth.assertThat;
 
-/**
- * @author Fabian Dietenberger
- */
+
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class HypemTrackAdapterIntegrationTest {
 
     private static final String HYPEM_URL_SOUNDCLOUD_SONG = "http://hypem.com/track/2c87x";
@@ -20,7 +25,16 @@ public class HypemTrackAdapterIntegrationTest {
     private static final String HYPEM_ID_NO_FILE_SONG = "21c8w";
     private static final String HYPEM_ID_FORBIDDEN_SONG = "2ey1t";
 
-    private final HypemTrackAdapter hypemTrackAdapter = new HypemTrackAdapter(new RestTemplate());
+    @Autowired
+    private HypemConfiguration hypemConfiguration;
+
+    private HypemTrackAdapter hypemTrackAdapter;
+    private final RestTemplate restTemplate = new RestTemplate();
+
+    @Before
+    public void beforeTest() {
+        hypemTrackAdapter = new HypemTrackAdapter(restTemplate, hypemConfiguration);
+    }
 
     @Test
     public void convertUrlToId() {

@@ -1,16 +1,24 @@
 package com.codecrafters.api.hypem;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.SortedMap;
 
 import static com.google.common.truth.Truth.assertThat;
 
 
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 public class HypemPlaylistAdapterIntegrationTest {
 
     private final HypemPlaylistAdapter chartsAdapter = new HypemPlaylistAdapter();
-    private final HypemConfiguration configuration = new HypemConfiguration();
+
+    @Autowired
+    private HypemConfiguration configuration;
 
     @Test
     public void testPopularNow() {

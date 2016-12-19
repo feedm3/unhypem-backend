@@ -32,6 +32,10 @@ public class HypemConfiguration {
         return "hypem.com";
     }
 
+    public String getHypemBaseUrl() {
+        return hypemProtocol + "://" + hypemHost;
+    }
+
     public String getHypemKey() {
         return hypemKey;
     }

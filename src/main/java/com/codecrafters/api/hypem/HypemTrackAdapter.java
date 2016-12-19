@@ -26,14 +26,14 @@ import static com.google.common.base.Preconditions.checkArgument;
 
     private static final String SOUNDCLOUD_HOST_NAME = "soundcloud.com";
 
-    private static final String HYPEM_TRACK_URL = "http://hypem.com/track/";
-    private static final String HYPEM_GO_URL = "http://hypem.com/go/sc/";
-    private static final String HYPEM_SERVE_URL = "http://hypem.com/serve/source/";
+    private final String HYPEM_TRACK_URL = "http://hypem.com/track/";
 
+    private final HypemConfiguration hypemConfiguration;
     private final RestTemplate restTemplate;
 
-    /* package */ HypemTrackAdapter(final RestTemplate restTemplate) {
+    /* package */ HypemTrackAdapter(final RestTemplate restTemplate, final HypemConfiguration configuration) {
         this.restTemplate = restTemplate;
+        this.hypemConfiguration = configuration;
         setupRestErrorHandler();
     }
 
@@ -76,14 +76,21 @@ import static com.google.common.base.Preconditions.checkArgument;
     }
 
     private URI getHostingGoUrl(final String hypemId) {
-        final RequestEntity<Void> requestEntity = HypemRequestEntity.to(HttpMethod.HEAD, HYPEM_GO_URL + hypemId);
+        final String hypemGoUrl = hypemConfiguration.getHypemBaseUrl() +
+                "/go/sc/" + hypemId +
+                "?key=" + hypemConfiguration.getHypemKey();
+        final RequestEntity<Void> requestEntity = HypemRequestEntity.to(HttpMethod.HEAD, hypemGoUrl);
         final ResponseEntity<Void> exchange = restTemplate.exchange(requestEntity, Void.class);
         return exchange.getHeaders().getLocation();
     }
 
     private String getHostingServeJsonBody(final String hypemId) {
         final String key = getTrackUrlAccessKey(hypemId);
-        final RequestEntity<Void> mp3Request = HypemRequestEntity.to(HttpMethod.GET, HYPEM_SERVE_URL + hypemId + "/" + key);
+        final String hypemServeUrl = hypemConfiguration.getHypemBaseUrl() +
+                "/serve/source/" + hypemId +
+                "/" + key +
+                "?key=" + hypemConfiguration.getHypemKey();
+        final RequestEntity<Void> mp3Request = HypemRequestEntity.to(HttpMethod.GET, hypemServeUrl);
         final ResponseEntity<String> mp3Response = restTemplate.exchange(mp3Request, String.class);
 
         if (mp3Response.getStatusCode() == HttpStatus.OK) {
@@ -101,11 +108,14 @@ import static com.google.common.base.Preconditions.checkArgument;
      * @return the key
      */
     private String getTrackUrlAccessKey(final String hypemId) {
-        final RequestEntity<Void> hypemKeyRequest = HypemRequestEntity.to(HttpMethod.GET, HYPEM_TRACK_URL + hypemId);
+        final String hypemTrackUrl = hypemConfiguration.getHypemBaseUrl() +
+                "/track/" + hypemId +
+                "?key=" + hypemConfiguration.getHypemKey();
+        final RequestEntity<Void> hypemKeyRequest = HypemRequestEntity.to(HttpMethod.GET, hypemTrackUrl);
         final ResponseEntity<String> hypemKeyResponse = restTemplate.exchange(hypemKeyRequest, String.class);
 
         final String body = hypemKeyResponse.getBody();
-        final String rawSongJson = StringUtils.substringBetween(body, "<script type=\"application/json\" id=\"displayList-data\">", "<script type=\"text/javascript\">");
+        final String rawSongJson = StringUtils.substringBetween(body, "<script type=\"application/json\" id=\"displayList-data\">", "</script>");
         final String songJson = StringUtils.trim(rawSongJson);
 
         try {
