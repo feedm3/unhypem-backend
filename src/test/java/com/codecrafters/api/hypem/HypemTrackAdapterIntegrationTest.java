@@ -1,6 +1,7 @@
 package com.codecrafters.api.hypem;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import static com.google.common.truth.Truth.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@Ignore
 public class HypemTrackAdapterIntegrationTest {
 
     private static final String HYPEM_URL_SOUNDCLOUD_SONG = "http://hypem.com/track/2c87x";
