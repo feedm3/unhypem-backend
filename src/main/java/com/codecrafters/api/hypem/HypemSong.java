@@ -1,12 +1,15 @@
 package com.codecrafters.api.hypem;
 
+import com.codecrafters.api.soundcloud.SoundcloudUtils;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import org.apache.commons.lang3.StringUtils;
 
+import java.net.URI;
 import java.util.Date;
 
 /**
- * This class is used as mapping class for the song object on hypem (especially the songs in the charts).
+ * This class is used as mapping class for the song object on hypem.
  *
  * @author Fabian Dietenberger
  */
@@ -23,6 +26,7 @@ public class HypemSong {
     private String postid;
     private String time;
     private String description;
+    private String fileUrl;
 
     @JsonProperty("loved_count")
     private int lovedCount;
@@ -41,6 +45,11 @@ public class HypemSong {
 
     @JsonProperty("thumb_url_artist")
     private String thumbUrlArtist;
+
+    public boolean isHostedOnSoundcloud() {
+        return StringUtils.isNotBlank(fileUrl) &&
+                SoundcloudUtils.isSoundcloudUrl(URI.create(fileUrl));
+    }
 
     public String getMediaid() {
         return mediaid;
@@ -190,5 +199,13 @@ public class HypemSong {
                 ", thumbUrlLarge='" + thumbUrlLarge + '\'' +
                 ", thumbUrlArtist='" + thumbUrlArtist + '\'' +
                 '}';
+    }
+
+    public String getFileUrl() {
+        return fileUrl;
+    }
+
+    public void setFileUrl(final String fileUrl) {
+        this.fileUrl = fileUrl;
     }
 }

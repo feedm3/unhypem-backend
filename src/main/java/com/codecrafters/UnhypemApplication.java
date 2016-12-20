@@ -1,8 +1,10 @@
 package com.codecrafters;
 
 import com.codecrafters.api.hypem.HypemApi;
+import com.codecrafters.api.hypem.HypemConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -35,7 +37,8 @@ public class UnhypemApplication {
     }
 
     @Bean
-    public HypemApi hypemApi() {
-        return new HypemApi();
+    @Autowired
+    public HypemApi hypemApi(final HypemConfiguration hypemConfiguration) {
+        return new HypemApi(hypemConfiguration);
     }
 }

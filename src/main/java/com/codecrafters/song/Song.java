@@ -12,12 +12,13 @@ import javax.persistence.*;
 public class Song {
 
     @EmbeddedId
-    private SongId songId;
+    private final SongId songId;
 
     private int durationInSeconds;
 
     @Column(unique = true)
     private String hypemMediaId;
+
     private long hypemLovedCount;
     private String streamUrl;
     private String soundcloudUrl;
@@ -33,6 +34,12 @@ public class Song {
         song.setArtist(hypemSong.getArtist());
         song.setTitle(hypemSong.getTitle());
         song.setHypemMediaId(hypemSong.getMediaid());
+
+        if (hypemSong.isHostedOnSoundcloud()) {
+            song.setSoundcloudUrl(hypemSong.getFileUrl());
+        } else {
+            song.setStreamUrl(hypemSong.getFileUrl());
+        }
         song.setHypemLovedCount(hypemSong.getLovedCount());
         return song;
     }
@@ -81,6 +88,11 @@ public class Song {
         return streamUrl;
     }
 
+    /**
+     * The URL to use for streaming. Either a soundcloud stream URL or a direct link to a mp3 file.
+     *
+     * @param streamUrl the url to set
+     */
     public void setStreamUrl(final String streamUrl) {
         this.streamUrl = streamUrl;
     }

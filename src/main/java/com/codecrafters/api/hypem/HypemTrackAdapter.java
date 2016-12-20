@@ -1,5 +1,6 @@
 package com.codecrafters.api.hypem;
 
+import com.codecrafters.api.soundcloud.SoundcloudUtils;
 import com.jayway.jsonpath.JsonPath;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpMethod;
@@ -23,8 +24,6 @@ import static com.google.common.base.Preconditions.checkArgument;
  * @author Fabian Dietenberger
  */
 /* package */ class HypemTrackAdapter {
-
-    private static final String SOUNDCLOUD_HOST_NAME = "soundcloud.com";
 
     private final String HYPEM_TRACK_URL = "http://hypem.com/track/";
 
@@ -62,7 +61,7 @@ import static com.google.common.base.Preconditions.checkArgument;
     /* package */ Optional<URI> getFileUriByHypemId(final String hypemId) {
         if (StringUtils.isNotBlank(hypemId)) {
             final URI goUrl = getHostingGoUrl(hypemId);
-            if (isSoundcloudUrl(goUrl)) {
+            if (SoundcloudUtils.isSoundcloudUrl(goUrl)) {
                 return Optional.of(goUrl);
             } else {
                 // if the song is not hosted on soundcloud we need to request another hypem endpoint
@@ -128,12 +127,6 @@ import static com.google.common.base.Preconditions.checkArgument;
     private Optional<URI> extractUrlField(final String json) {
         final String url = JsonPath.read(json, "$.url");
         return Optional.of(URI.create(url));
-    }
-
-    private boolean isSoundcloudUrl(final URI fileUri) {
-        return fileUri != null &&
-                StringUtils.equals(fileUri.getHost(), SOUNDCLOUD_HOST_NAME) &&
-                !StringUtils.equals(fileUri.getPath(), "/not/found");
     }
 
     private void setupRestErrorHandler() {
