@@ -3,9 +3,7 @@ package com.codecrafters.api.hypem;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 
-/**
- *
- */
+
 @Configuration
 public class HypemConfiguration {
 

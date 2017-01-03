@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.web.client.RestTemplate;
 
 import java.net.InetAddress;
 
@@ -40,5 +41,10 @@ public class UnhypemApplication {
     @Autowired
     public HypemApi hypemApi(final HypemConfiguration hypemConfiguration) {
         return new HypemApi(hypemConfiguration);
+    }
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
     }
 }
