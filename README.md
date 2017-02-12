@@ -1,13 +1,13 @@
-# unhypem-boot
+# Unhypem Backend
 
-[![Build Status](https://img.shields.io/travis/feedm3/unhypem-boot.svg?style=flat-square)](https://travis-ci.org/feedm3/unhypem-boot)
-[![Dependency Status](https://dependencyci.com/github/feedm3/unhypem-boot/badge?style=flat-square)](https://dependencyci.com/github/feedm3/unhypem-boot)
+[![Build Status](https://img.shields.io/travis/feedm3/unhypem-backend.svg?style=flat-square)](https://travis-ci.org/feedm3/unhypem-backend)
+[![Dependency Status](https://dependencyci.com/github/feedm3/unhypem-backend/badge?style=flat-square)](https://dependencyci.com/github/feedm3/unhypem-backend)
 
-Backend for [Unhypem](https://github.com/feedm3/unhypem) implemented with Java.
+Backend for [unhypem.com](https://unhypem.com).
 
 ## Setup
 
-- Postgres Database (9.5): `localhost:5433/unhypemboot`
+You have to setup a postgres database and edit the _application,properties_ file.
 
 ## Run
 

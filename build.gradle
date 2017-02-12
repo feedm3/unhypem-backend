@@ -1,23 +1,11 @@
-buildscript {
-    ext {
-        springBootVersion = '1.4.1.RELEASE'
-    }
-    repositories {
-        mavenCentral()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
-}
-
 plugins {
     id 'java'
     id 'eclipse'
+    id 'org.springframework.boot' version '1.5.1.RELEASE'
     id 'com.gradle.build-scan' version '1.0'
-    id 'com.github.ben-manes.versions' version '0.13.0'
+    id 'com.github.ben-manes.versions' version '0.14.0'
     id "org.owasp.dependencycheck" version "1.4.3"
 }
-apply plugin: 'spring-boot'
 
 jar {
     baseName = artifactId
@@ -32,7 +20,7 @@ repositories {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
+    gradleVersion = '3.3'
 }
 
 dependencies {
@@ -42,14 +30,14 @@ dependencies {
             'org.springframework.boot:spring-boot-starter-actuator',
             'org.springframework.boot:spring-boot-devtools',
             'org.apache.commons:commons-lang3:3.5',
-            'com.google.guava:guava:20.0',
+            'com.google.guava:guava:21.0',
             'com.jayway.jsonpath:json-path:2.2.0'
 
     runtime 'org.postgresql:postgresql',
             'com.h2database:h2'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test',
-            'com.google.truth:truth:0.30'
+            'com.google.truth:truth:0.31'
 }
 
 test {

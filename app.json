@@ -1,5 +1,5 @@
 {
-  "name": "unhypem-boot",
+  "name": "unhypem-backend",
   "scripts": {},
   "env": {
     "spring.datasource.password": {
