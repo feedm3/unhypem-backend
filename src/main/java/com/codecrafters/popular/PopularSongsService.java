@@ -16,7 +16,7 @@ public class PopularSongsService {
 
     @Cacheable("popularSongs")
     public PopularSongs getPopularSongs() {
-        return repository.findFirstByOrderByTimestampAsc();
+        return repository.findFirstByOrderByTimestampDesc();
     }
 
     @CacheEvict(value = "popularSongs", allEntries = true)
