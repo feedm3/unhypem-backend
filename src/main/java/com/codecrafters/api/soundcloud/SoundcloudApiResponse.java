@@ -12,7 +12,7 @@ public class SoundcloudApiResponse {
     @JsonProperty("stream_url")
     private String streamUrl;
 
-    @JsonProperty("durationInMillis")
+    @JsonProperty("duration")
     private int durationInMillis;
 
     @JsonProperty("waveform_url")
