@@ -26,7 +26,9 @@ public class SoundcloudApi {
     public Optional<SoundcloudApiResponse> fetchSongData(final String soundcloudUrl) {
         final String fetchUrl = "https://api.soundcloud.com/resolve.json?url=" + soundcloudUrl + "&client_id=" + configuration.getClientId();
         try {
-            return Optional.of(restTemplate.getForObject(fetchUrl, SoundcloudApiResponse.class));
+            final SoundcloudApiResponse response = restTemplate.getForObject(fetchUrl, SoundcloudApiResponse.class);
+            LOG.debug("Fetch of {} successful: {}", fetchUrl, response);
+            return Optional.of(response);
         } catch (final Exception e) {
             LOG.warn("Soundcloud Url could not be fetched. Url: {} - Error: {}", soundcloudUrl, e.getMessage());
             return Optional.empty();

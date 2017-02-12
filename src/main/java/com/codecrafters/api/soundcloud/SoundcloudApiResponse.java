@@ -52,4 +52,14 @@ public class SoundcloudApiResponse {
     public void setWaveformUrl(final String waveformUrl) {
         this.waveformUrl = waveformUrl;
     }
+
+    @Override
+    public String toString() {
+        return "SoundcloudApiResponse{" +
+                "id='" + id + '\'' +
+                ", streamUrl='" + streamUrl + '\'' +
+                ", durationInMillis=" + durationInMillis +
+                ", waveformUrl='" + waveformUrl + '\'' +
+                '}';
+    }
 }
