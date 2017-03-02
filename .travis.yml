@@ -8,7 +8,7 @@ env:
     - SPRING_PROFILES_ACTIVE=travis
 
 before_script:
-    - psql -c "create database unhypemboot;" -U postgres
+    - psql -c "create database unhypem;" -U postgres
 
 before_install:
     - chmod +x gradlew
