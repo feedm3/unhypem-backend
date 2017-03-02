@@ -2,20 +2,25 @@ package com.codecrafters.popular;
 
 import com.codecrafters.song.Song;
 import org.hibernate.annotations.SortNatural;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 import java.util.SortedMap;
 
 /**
  * @author Fabian Dietenberger
  */
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class PopularSongs {
 
     @Id
@@ -25,7 +30,10 @@ public class PopularSongs {
     @ManyToMany(fetch = FetchType.EAGER)
     @SortNatural
     private SortedMap<Integer, Song> songs;
-    private LocalDateTime timestamp;
+
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
 
     public Long getId() {
         return id;
@@ -43,15 +51,11 @@ public class PopularSongs {
         this.songs = songs;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
+    public Date getCreatedDate() {
+        return createdDate;
     }
 
-    public void setTimestamp(final LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public long getTimestampInMillis() {
-        return timestamp.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    public void setCreatedDate(final Date createdDate) {
+        this.createdDate = createdDate;
     }
 }

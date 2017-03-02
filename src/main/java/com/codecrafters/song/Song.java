@@ -1,24 +1,38 @@
 package com.codecrafters.song;
 
 import com.codecrafters.api.hypem.HypemSong;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.Index;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
  * @author Fabian Dietenberger
  */
 @Entity
 @Table(indexes = {@Index(name = "hypemMediaIdIndex", columnList = "hypemMediaId")})
+@EntityListeners(AuditingEntityListener.class)
 public class Song {
 
     @EmbeddedId
     private final SongId songId;
 
-    private int durationInSeconds;
-
     @Column(unique = true)
     private String hypemMediaId;
 
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdDate;
+
+    private int durationInSeconds;
     private long hypemLovedCount;
     private String streamUrl;
     private String soundcloudUrl;
@@ -119,5 +133,13 @@ public class Song {
 
     public void setWaveformUrl(final String waveformUrl) {
         this.waveformUrl = waveformUrl;
+    }
+
+    public Date getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(final Date createdDate) {
+        this.createdDate = createdDate;
     }
 }

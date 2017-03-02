@@ -36,7 +36,7 @@ public class PopularSongsServiceIntegrationTest {
         service.getPopularSongs();
         service.getPopularSongs();
 
-        verify(repository, Mockito.times(1)).findFirstByOrderByTimestampDesc();
+        verify(repository, Mockito.times(1)).findFirstByOrderByCreatedDateDesc();
     }
 
     @Test
@@ -47,7 +47,7 @@ public class PopularSongsServiceIntegrationTest {
         service.getPopularSongs();
         service.getPopularSongs();
 
-        verify(repository, Mockito.times(2)).findFirstByOrderByTimestampDesc();
+        verify(repository, Mockito.times(2)).findFirstByOrderByCreatedDateDesc();
     }
 
     private void evictCache() {

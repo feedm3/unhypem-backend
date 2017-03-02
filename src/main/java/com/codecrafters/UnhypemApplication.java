@@ -11,6 +11,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -22,6 +23,7 @@ import java.net.InetAddress;
 @SpringBootApplication
 @EnableScheduling
 @EnableCaching
+@EnableJpaAuditing
 public class UnhypemApplication {
 
     private final Logger LOGGER = LoggerFactory.getLogger(UnhypemApplication.class);

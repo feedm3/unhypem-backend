@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -62,7 +61,6 @@ class PopularChartsImportJob {
         // save charts
         final PopularSongs popularSongs = new PopularSongs();
         popularSongs.setSongs(resultCharts);
-        popularSongs.setTimestamp(LocalDateTime.now());
         popularSongsService.savePopularSongs(popularSongs);
         LOGGER.info("Finished importing new popular charts");
     }
