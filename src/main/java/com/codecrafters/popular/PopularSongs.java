@@ -3,8 +3,13 @@ package com.codecrafters.popular;
 import com.codecrafters.song.Song;
 import org.hibernate.annotations.SortNatural;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.SortedMap;
 
 /**
@@ -44,5 +49,9 @@ public class PopularSongs {
 
     public void setTimestamp(final LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public long getTimestampInMillis() {
+        return timestamp.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
     }
 }
