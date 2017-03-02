@@ -37,7 +37,7 @@ dependencies {
             'com.h2database:h2'
 
     testCompile 'org.springframework.boot:spring-boot-starter-test',
-            'com.google.truth:truth:0.31'
+            'com.google.truth:truth:0.32'
 }
 
 test {
