@@ -5,6 +5,7 @@ import org.hibernate.annotations.SortNatural;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
@@ -16,9 +17,7 @@ import javax.persistence.TemporalType;
 import java.util.Date;
 import java.util.SortedMap;
 
-/**
- * @author Fabian Dietenberger
- */
+
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 public class PopularSongs {
@@ -33,6 +32,7 @@ public class PopularSongs {
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
     private Date createdDate;
 
     public Long getId() {
@@ -57,5 +57,14 @@ public class PopularSongs {
 
     public void setCreatedDate(final Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @Override
+    public String toString() {
+        return "PopularSongs{" +
+                "id=" + id +
+                ", songs=" + songs +
+                ", createdDate=" + createdDate +
+                '}';
     }
 }

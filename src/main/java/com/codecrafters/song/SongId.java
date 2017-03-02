@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author Fabian Dietenberger
  */
 @Embeddable
-class SongId implements Serializable {
+public class SongId implements Serializable {
 
     private static final long serialVersionUID = 3071051916048387094L;
 
@@ -64,5 +64,13 @@ class SongId implements Serializable {
         int result = artist.hashCode();
         result = 31 * result + title.hashCode();
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "SongId{" +
+                "artist='" + artist + '\'' +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

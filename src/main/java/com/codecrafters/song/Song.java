@@ -30,6 +30,7 @@ public class Song {
 
     @CreatedDate
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(nullable = false, updatable = false)
     private Date createdDate;
 
     private int durationInSeconds;
@@ -141,5 +142,20 @@ public class Song {
 
     public void setCreatedDate(final Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Song{" +
+                "songId=" + songId +
+                ", hypemMediaId='" + hypemMediaId + '\'' +
+                ", createdDate=" + createdDate +
+                ", durationInSeconds=" + durationInSeconds +
+                ", hypemLovedCount=" + hypemLovedCount +
+                ", streamUrl='" + streamUrl + '\'' +
+                ", soundcloudUrl='" + soundcloudUrl + '\'' +
+                ", soundcloudId='" + soundcloudId + '\'' +
+                ", waveformUrl='" + waveformUrl + '\'' +
+                '}';
     }
 }

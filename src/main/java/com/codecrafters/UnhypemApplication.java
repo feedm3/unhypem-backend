@@ -2,6 +2,8 @@ package com.codecrafters;
 
 import com.codecrafters.api.hypem.HypemApi;
 import com.codecrafters.api.hypem.HypemConfiguration;
+import com.codecrafters.popular.PopularSongsRepository;
+import com.codecrafters.song.SongRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,12 +35,11 @@ public class UnhypemApplication {
     }
 
     @Bean
-    CommandLineRunner afterStartup(final Environment environment) {
-        return args -> {
+    @Autowired
+    CommandLineRunner afterStartup(final Environment environment, final PopularSongsRepository popularSongsRepository, final SongRepository songRepository) {
+        return (String... args) -> {
             final String host = InetAddress.getLocalHost().getHostAddress();
             final String port = environment.getProperty("local.server.port");
-
-            LOGGER.info("Server started at {}:{}", host, port);
         };
     }
 
