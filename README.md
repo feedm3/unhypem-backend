@@ -16,6 +16,15 @@ To start the project simply hit
 gradlew bootRun
 ```
 
+### Docker
+
+First build the container `unhypem-backend` and then start it (expose db and http port).
+
+``` 
+docker build -t unyhpem-backend
+docker run -p 5432:5432 -p 80:8080 --name unhypem-backend-instance unhypem-backend
+```
+
 ## Test
 
 To start all test use
