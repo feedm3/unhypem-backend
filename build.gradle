@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'eclipse'
-    id 'org.springframework.boot' version '1.5.1.RELEASE'
+    id 'org.springframework.boot' version '1.5.2.RELEASE'
     id 'com.gradle.build-scan' version '1.0'
     id 'com.github.ben-manes.versions' version '0.14.0'
     id "org.owasp.dependencycheck" version "1.4.3"
@@ -20,7 +20,7 @@ repositories {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.3'
+    gradleVersion = '3.4.1'
 }
 
 dependencies {

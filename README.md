@@ -21,8 +21,9 @@ gradlew bootRun
 First build the container `unhypem-backend` and then start it (expose db and http port).
 
 ``` 
-docker build -t unyhpem-backend
-docker run -p 5432:5432 -p 80:8080 --name unhypem-backend-instance unhypem-backend
+gradlew build -x test
+docker build -t unyhpem-backend .
+docker run -p 80:8080 -it --net=host unhypem-backend
 ```
 
 ## Test
