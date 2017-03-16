@@ -46,7 +46,7 @@ class PopularChartsImportJob {
 
     @Scheduled(fixedRateString = "${unhypem.import.interval-in-millis}")
     public void importCurrentPopularCharts() {
-        LOGGER.info("Start importing new popular charts");
+        LOGGER.info("Start importing new popular charts...");
         final SortedMap<Integer, HypemSong> popularNowPlaylist = hypemApi.getPlaylist(new HypemPlaylistUrl(HypemPlaylistUrl.Type.POPULAR_NOW, hypemConfiguration));
 
         // save every single song

@@ -34,6 +34,7 @@ public class DatabaseCleaningJob {
 
     @Scheduled(fixedRateString = "${unhypem.database-cleaning.interval-in-millis}")
     public void limitDatabaseTablesTo10kRows() {
+        LOGGER.info("Checking database table sizes...");
         final long numberOfPopularEntries = popularSongsRepository.count();
         final long numberOfSongs = songRepository.count();
 
@@ -50,5 +51,6 @@ public class DatabaseCleaningJob {
             final List<Song> oldest100Songs = songRepository.findFirs100ByOrderByCreatedDateAsc();
             songRepository.deleteInBatch(oldest100Songs);
         }
+        LOGGER.info("Database check finished");
     }
 }
