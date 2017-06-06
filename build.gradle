@@ -1,9 +1,9 @@
 plugins {
     id 'java'
     id 'eclipse'
-    id 'org.springframework.boot' version '1.5.2.RELEASE'
-    id 'com.gradle.build-scan' version '1.0'
-    id 'com.github.ben-manes.versions' version '0.14.0'
+    id 'org.springframework.boot' version '1.5.3.RELEASE'
+    id 'com.gradle.build-scan' version '1.7.3'
+    id 'com.github.ben-manes.versions' version '0.15.0'
     id 'org.owasp.dependencycheck' version "1.4.5.1"
 }
 
@@ -20,7 +20,7 @@ repositories {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '3.4.1'
+    gradleVersion = '3.5'
 }
 
 dependencies {
@@ -30,14 +30,14 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-actuator')
     compile('org.springframework.boot:spring-boot-devtools')
     compile('org.apache.commons:commons-lang3:3.5')
-    compile('com.google.guava:guava:21.0')
+    compile('com.google.guava:guava:22.0')
     compile('com.jayway.jsonpath:json-path:2.2.0')
 
     runtime('org.postgresql:postgresql')
     runtime('com.h2database:h2')
 
     testCompile('org.springframework.boot:spring-boot-starter-test')
-    testCompile('com.google.truth:truth:0.32')
+    testCompile('com.google.truth:truth:0.33')
 }
 
 test {
