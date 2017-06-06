@@ -10,6 +10,7 @@ import com.codecrafters.popular.PopularSongs;
 import com.codecrafters.popular.PopularSongsService;
 import com.codecrafters.song.Song;
 import com.codecrafters.song.SongRepository;
+import com.codecrafters.song.SongService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,15 +31,15 @@ class PopularChartsImportJob {
     private static final Logger LOGGER = LoggerFactory.getLogger(PopularChartsImportJob.class);
 
     private final PopularSongsService popularSongsService;
-    private final SongRepository songRepository;
+    private final SongService songService;
     private final HypemApi hypemApi;
     private final HypemConfiguration hypemConfiguration;
     private final SoundcloudApi soundcloudApi;
 
     @Autowired
-    public PopularChartsImportJob(final PopularSongsService popularSongsService, final SongRepository songRepository, final HypemApi hypemApi, final HypemConfiguration hypemConfiguration, final SoundcloudApi soundcloudApi) {
+    public PopularChartsImportJob(final PopularSongsService popularSongsService, final SongService songService, final HypemApi hypemApi, final HypemConfiguration hypemConfiguration, final SoundcloudApi soundcloudApi) {
         this.popularSongsService = popularSongsService;
-        this.songRepository = songRepository;
+        this.songService = songService;
         this.hypemApi = hypemApi;
         this.hypemConfiguration = hypemConfiguration;
         this.soundcloudApi = soundcloudApi;
@@ -54,7 +55,7 @@ class PopularChartsImportJob {
         popularNowPlaylist.forEach((position, hypemSong) -> {
             final Song song = Song.from(hypemSong);
             fetchSoundcloudData(song);
-            final Song savedSong = songRepository.save(song);
+            final Song savedSong = songService.save(song);
             resultCharts.put(position, savedSong);
         });
 

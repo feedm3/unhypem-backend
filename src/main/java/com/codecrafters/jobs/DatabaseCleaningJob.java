@@ -2,8 +2,7 @@ package com.codecrafters.jobs;
 
 import com.codecrafters.popular.PopularSongs;
 import com.codecrafters.popular.PopularSongsRepository;
-import com.codecrafters.song.Song;
-import com.codecrafters.song.SongRepository;
+import com.codecrafters.song.SongService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,19 +23,19 @@ public class DatabaseCleaningJob {
 
     private final PopularSongsRepository popularSongsRepository;
 
-    private final SongRepository songRepository;
+    private final SongService songService;
 
     @Autowired
-    public DatabaseCleaningJob(final PopularSongsRepository popularSongsRepository, final SongRepository songRepository) {
+    public DatabaseCleaningJob(final PopularSongsRepository popularSongsRepository, final SongService songService) {
         this.popularSongsRepository = popularSongsRepository;
-        this.songRepository = songRepository;
+        this.songService = songService;
     }
 
     @Scheduled(fixedRateString = "${unhypem.database-cleaning.interval-in-millis}")
     public void limitDatabaseTablesTo10kRows() {
         LOGGER.info("Checking database table sizes...");
         final long numberOfPopularEntries = popularSongsRepository.count();
-        final long numberOfSongs = songRepository.count();
+        final long numberOfSongs = songService.count();
 
         if (numberOfPopularEntries >= (HEROKU_MAX_DATABASE_ROWS - 1000)) {
             LOGGER.warn("Heroku free tier database limit nearly reach with {} rows in the popular_songs table", numberOfPopularEntries);
@@ -48,8 +47,7 @@ public class DatabaseCleaningJob {
         if (numberOfSongs >= HEROKU_MAX_DATABASE_ROWS - 1000) {
             LOGGER.warn("Heroku free tier database limit nearly reach with {} rows in the songs table", numberOfSongs);
             LOGGER.warn("Deleting some old records...");
-            final List<Song> oldest100Songs = songRepository.findFirs100ByOrderByCreatedDateAsc();
-            songRepository.deleteInBatch(oldest100Songs);
+            songService.deleteSomeOfTheOldestRecords();
         }
         LOGGER.info("Database check finished");
     }

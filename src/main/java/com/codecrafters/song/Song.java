@@ -4,26 +4,27 @@ import com.codecrafters.api.hypem.HypemSong;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.Index;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
  * @author Fabian Dietenberger
  */
 @Entity
-@Table(indexes = {@Index(name = "hypemMediaIdIndex", columnList = "hypemMediaId")})
+@Table(name = "songs", indexes = {@Index(name = "hypemMediaIdIndex", columnList = "hypemMediaId")})
 @EntityListeners(AuditingEntityListener.class)
 public class Song {
 
-    @EmbeddedId
-    private final SongId songId;
+    @Id
+    @GeneratedValue
+    private Long id;
+
+    @NotNull
+    private String artist;
+
+    @NotNull
+    private String title;
 
     @Column(unique = true)
     private String hypemMediaId;
@@ -41,7 +42,6 @@ public class Song {
     private String waveformUrl;
 
     public Song() {
-        songId = new SongId();
     }
 
     public static Song from(final HypemSong hypemSong) {
@@ -59,20 +59,28 @@ public class Song {
         return song;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(final Long id) {
+        this.id = id;
+    }
+
     public String getArtist() {
-        return songId.getArtist();
+        return artist;
     }
 
     public void setArtist(final String artist) {
-        songId.setArtist(artist);
+        this.artist = artist;
     }
 
     public String getTitle() {
-        return songId.getTitle();
+        return title;
     }
 
     public void setTitle(final String title) {
-        songId.setTitle(title);
+        this.title = title;
     }
 
     public int getDurationInSeconds() {
@@ -147,7 +155,9 @@ public class Song {
     @Override
     public String toString() {
         return "Song{" +
-                "songId=" + songId +
+                "id=" + id +
+                ", artist='" + artist + '\'' +
+                ", title='" + title + '\'' +
                 ", hypemMediaId='" + hypemMediaId + '\'' +
                 ", createdDate=" + createdDate +
                 ", durationInSeconds=" + durationInSeconds +

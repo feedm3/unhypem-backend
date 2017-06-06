@@ -9,12 +9,12 @@ import java.util.List;
  * @author Fabian Dietenberger
  */
 @Repository
-public interface SongRepository extends JpaRepository<Song, SongId> {
+interface SongRepository extends JpaRepository<Song, Long> {
 
     Song findOneByHypemMediaId(final String hypemMediaId);
 
     /**
      * @return the 100 oldest songs
      */
-    List<Song> findFirs100ByOrderByCreatedDateAsc();
+    List<Song> findFirst100ByOrderByCreatedDateAsc();
 }
