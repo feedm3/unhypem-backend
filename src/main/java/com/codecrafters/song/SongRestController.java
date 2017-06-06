@@ -13,18 +13,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 class SongRestController {
 
-    private final SongRepository songRepository;
+    private final SongService songService;
 
     @Autowired
-    public SongRestController(final SongRepository songRepository) {
-        this.songRepository = songRepository;
+    public SongRestController(final SongService songService) {
+        this.songService = songService;
     }
 
     @RequestMapping("/song/{hypemMediaId}")
     public ResponseEntity<Song> getSong(@PathVariable final String hypemMediaId) {
-        final Song song = songRepository.findOneByHypemMediaId(hypemMediaId);
+        final Song song = songService.findOneByHypemMediaId(hypemMediaId);
         if (song == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
         return ResponseEntity.ok(song);
     }

@@ -19,6 +19,10 @@ public class SongService {
         this.songRepository = songRepository;
     }
 
+    public Song findOneByHypemMediaId(final String hypemMediaId) {
+        return songRepository.findOneByHypemMediaId(hypemMediaId);
+    }
+
     public Song save(final Song song) {
         if (StringUtils.isNotBlank(song.getHypemMediaId())) {
             final Song songFromHypem = songRepository.findOneByHypemMediaId(song.getHypemMediaId());

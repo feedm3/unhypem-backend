@@ -7,7 +7,7 @@ import java.util.List;
 
 
 @Repository
-public interface PopularSongsRepository extends JpaRepository<PopularSongs, Long> {
+interface PopularSongsRepository extends JpaRepository<PopularSongs, Long> {
 
     /**
      * @return the newest chart entry
