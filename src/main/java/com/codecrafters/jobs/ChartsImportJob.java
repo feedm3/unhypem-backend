@@ -6,8 +6,8 @@ import com.codecrafters.api.hypem.HypemPlaylistUrl;
 import com.codecrafters.api.hypem.HypemSong;
 import com.codecrafters.api.soundcloud.SoundcloudApi;
 import com.codecrafters.api.soundcloud.SoundcloudApiResponse;
-import com.codecrafters.popular.PopularSongs;
-import com.codecrafters.popular.PopularSongsService;
+import com.codecrafters.charts.Charts;
+import com.codecrafters.charts.ChartsService;
 import com.codecrafters.song.Song;
 import com.codecrafters.song.SongService;
 import org.apache.commons.lang3.StringUtils;
@@ -22,22 +22,22 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * This class is used to import the current popular charts into the database at a given interval.
+ * This class is used to import the current charts charts into the database at a given interval.
  */
 @Component
-class PopularChartsImportJob {
+class ChartsImportJob {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(PopularChartsImportJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChartsImportJob.class);
 
-    private final PopularSongsService popularSongsService;
+    private final ChartsService chartsService;
     private final SongService songService;
     private final HypemApi hypemApi;
     private final HypemConfiguration hypemConfiguration;
     private final SoundcloudApi soundcloudApi;
 
     @Autowired
-    public PopularChartsImportJob(final PopularSongsService popularSongsService, final SongService songService, final HypemApi hypemApi, final HypemConfiguration hypemConfiguration, final SoundcloudApi soundcloudApi) {
-        this.popularSongsService = popularSongsService;
+    public ChartsImportJob(final ChartsService chartsService, final SongService songService, final HypemApi hypemApi, final HypemConfiguration hypemConfiguration, final SoundcloudApi soundcloudApi) {
+        this.chartsService = chartsService;
         this.songService = songService;
         this.hypemApi = hypemApi;
         this.hypemConfiguration = hypemConfiguration;
@@ -45,8 +45,8 @@ class PopularChartsImportJob {
     }
 
     @Scheduled(fixedRateString = "${unhypem.import.interval-in-millis}")
-    public void importCurrentPopularCharts() {
-        LOGGER.info("Start importing new popular charts...");
+    public void importCurrentCharts() {
+        LOGGER.info("Start importing new charts...");
         final SortedMap<Integer, HypemSong> popularNowPlaylist = hypemApi.getPlaylist(new HypemPlaylistUrl(HypemPlaylistUrl.Type.POPULAR_NOW, hypemConfiguration));
 
         // save every single song
@@ -59,10 +59,10 @@ class PopularChartsImportJob {
         });
 
         // save charts
-        final PopularSongs popularSongs = new PopularSongs();
-        popularSongs.setSongs(resultCharts);
-        popularSongsService.savePopularSongs(popularSongs);
-        LOGGER.info("Finished importing new popular charts");
+        final Charts charts = new Charts();
+        charts.setSongs(resultCharts);
+        chartsService.saveCharts(charts);
+        LOGGER.info("Finished importing new charts");
     }
 
     private void fetchSoundcloudData(final Song song) {

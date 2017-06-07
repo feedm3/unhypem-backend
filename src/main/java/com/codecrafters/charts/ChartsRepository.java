@@ -1,4 +1,4 @@
-package com.codecrafters.popular;
+package com.codecrafters.charts;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -7,15 +7,15 @@ import java.util.List;
 
 
 @Repository
-interface PopularSongsRepository extends JpaRepository<PopularSongs, Long> {
+interface ChartsRepository extends JpaRepository<Charts, Long> {
 
     /**
      * @return the newest chart entry
      */
-    PopularSongs findFirstByOrderByCreatedDateDesc();
+    Charts findFirstByOrderByCreatedDateDesc();
 
     /**
      * @return the 10 oldest chart entries
      */
-    List<PopularSongs> findFirst10ByOrderByCreatedDateAsc();
+    List<Charts> findFirst10ByOrderByCreatedDateAsc();
 }

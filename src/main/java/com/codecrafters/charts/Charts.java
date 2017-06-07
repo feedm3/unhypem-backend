@@ -1,4 +1,4 @@
-package com.codecrafters.popular;
+package com.codecrafters.charts;
 
 import com.codecrafters.song.Song;
 import org.hibernate.annotations.SortNatural;
@@ -20,7 +20,7 @@ import java.util.SortedMap;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-public class PopularSongs {
+public class Charts {
 
     @Id
     @GeneratedValue
@@ -61,7 +61,7 @@ public class PopularSongs {
 
     @Override
     public String toString() {
-        return "PopularSongs{" +
+        return "Charts{" +
                 "id=" + id +
                 ", songs=" + songs +
                 ", createdDate=" + createdDate +

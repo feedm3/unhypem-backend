@@ -1,4 +1,4 @@
-package com.codecrafters.popular;
+package com.codecrafters.charts;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -15,16 +15,16 @@ import static org.mockito.Mockito.verify;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-public class PopularSongsServiceIntegrationTest {
+public class ChartsServiceIntegrationTest {
 
     @Autowired
-    private PopularSongsService service;
+    private ChartsService service;
 
     @Autowired
     private CacheManager cacheManager;
 
     @MockBean
-    private PopularSongsRepository repository;
+    private ChartsRepository repository;
 
     @Before
     public void beforeTest() {
@@ -33,19 +33,19 @@ public class PopularSongsServiceIntegrationTest {
 
     @Test
     public void repositoryResponseWillBeCached() {
-        service.getPopularSongs();
-        service.getPopularSongs();
+        service.getCharts();
+        service.getCharts();
 
         verify(repository, Mockito.times(1)).findFirstByOrderByCreatedDateDesc();
     }
 
     @Test
     public void chacheWillBeRenewedAfterUpdate() {
-        service.getPopularSongs();
-        service.getPopularSongs();
-        service.savePopularSongs(new PopularSongs());
-        service.getPopularSongs();
-        service.getPopularSongs();
+        service.getCharts();
+        service.getCharts();
+        service.saveCharts(new Charts());
+        service.getCharts();
+        service.getCharts();
 
         verify(repository, Mockito.times(2)).findFirstByOrderByCreatedDateDesc();
     }
