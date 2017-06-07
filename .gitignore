@@ -174,3 +174,4 @@ buildNumber.properties
 ## Custom
 !gradle/wrapper/*.jar
 application-prod.properties
+application-local.properties
