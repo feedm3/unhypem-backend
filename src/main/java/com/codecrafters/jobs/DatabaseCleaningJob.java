@@ -1,12 +1,14 @@
 package com.codecrafters.jobs;
 
-import com.codecrafters.charts.ChartsService;
-import com.codecrafters.song.SongService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.codecrafters.charts.ChartsService;
+import com.codecrafters.song.SongService;
 
 /**
  * This class is used to check database tables dont exceed 10.000 rows
@@ -34,13 +36,14 @@ public class DatabaseCleaningJob {
         final long numberOfCharts = chartsService.count();
         final long numberOfSongs = songService.count();
 
-        if (numberOfCharts >= (HEROKU_MAX_DATABASE_ROWS - 1000)) {
+        // divide through 50 as every chart has a mapping table to the songs with 50 rows each
+        if (numberOfCharts >= (HEROKU_MAX_DATABASE_ROWS / 50)) {
             LOGGER.warn("Heroku free tier database limit nearly reach with {} rows in the charts table", numberOfCharts);
             LOGGER.warn("Deleting some old records...");
             chartsService.deleteSomeOfTheOldestRecords();
         }
 
-        if (numberOfSongs >= HEROKU_MAX_DATABASE_ROWS - 1000) {
+        if (numberOfSongs >= HEROKU_MAX_DATABASE_ROWS) {
             LOGGER.warn("Heroku free tier database limit nearly reach with {} rows in the songs table", numberOfSongs);
             LOGGER.warn("Deleting some old records...");
             songService.deleteSomeOfTheOldestRecords();
