@@ -36,7 +36,7 @@ public class DatabaseCleaningJob {
 
         final long numberOfCharts = chartsService.count();
         final long numberOfSongs = songService.count();
-        final long maxNumberOfCharts = HEROKU_MAX_DATABASE_ROWS / 50;
+        final long maxNumberOfCharts = HEROKU_MAX_DATABASE_ROWS / 500;
         final long maxNumberOfSongs = HEROKU_MAX_DATABASE_ROWS - 1000;
 
         LOGGER.info("Number of charts: {}/{}", numberOfCharts, maxNumberOfCharts);
