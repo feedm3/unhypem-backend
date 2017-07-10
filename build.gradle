@@ -20,7 +20,7 @@ repositories {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.0'
+    gradleVersion = '4.0.1'
 }
 
 dependencies {
@@ -31,7 +31,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-devtools')
     compile('org.apache.commons:commons-lang3:3.6')
     compile('com.google.guava:guava:22.0')
-    compile('com.jayway.jsonpath:json-path:2.3.0')
+    compile('com.jayway.jsonpath:json-path:2.4.0')
 
     runtime('org.postgresql:postgresql')
     runtime('com.h2database:h2')
