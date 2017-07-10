@@ -24,9 +24,7 @@ public class StartupRunner implements CommandLineRunner {
     public void run(final String... args) throws Exception {
         final String host = InetAddress.getLocalHost().getHostAddress();
         final String port = environment.getProperty("local.server.port");
-        final String databaseUrl = environment.getProperty("database.url");
 
         LOGGER.info("Server started at {}:{}", host, port);
-        LOGGER.info("Database url: {}", databaseUrl);
     }
 }

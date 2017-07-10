@@ -33,19 +33,23 @@ public class DatabaseCleaningJob {
     @Scheduled(fixedRateString = "${unhypem.database-cleaning.interval-in-millis}")
     public void limitDatabaseTablesTo10kRows() {
         LOGGER.info("Checking database table sizes...");
+
         final long numberOfCharts = chartsService.count();
         final long numberOfSongs = songService.count();
+        final long maxNumberOfCharts = HEROKU_MAX_DATABASE_ROWS / 50;
+        final long maxNumberOfSongs = HEROKU_MAX_DATABASE_ROWS - 1000;
+
+        LOGGER.info("Number of charts: {}/{}", numberOfCharts, maxNumberOfCharts);
+        LOGGER.info("Number of songs: {}/{}", numberOfSongs, maxNumberOfSongs);
 
         // divide through 50 as every chart has a mapping table to the songs with 50 rows each
-        if (numberOfCharts >= (HEROKU_MAX_DATABASE_ROWS / 50)) {
-            LOGGER.warn("Heroku free tier database limit nearly reach with {} rows in the charts table", numberOfCharts);
-            LOGGER.warn("Deleting some old records...");
+        if (numberOfCharts >= maxNumberOfCharts) {
+            LOGGER.warn("Maximum number of charts reached, clearing...");
             chartsService.deleteSomeOfTheOldestRecords();
         }
 
-        if (numberOfSongs >= HEROKU_MAX_DATABASE_ROWS) {
-            LOGGER.warn("Heroku free tier database limit nearly reach with {} rows in the songs table", numberOfSongs);
-            LOGGER.warn("Deleting some old records...");
+        if (numberOfSongs >= maxNumberOfSongs) {
+            LOGGER.warn("Maximum number of songs reached, clearing...");
             songService.deleteSomeOfTheOldestRecords();
         }
         LOGGER.info("Database check finished");
