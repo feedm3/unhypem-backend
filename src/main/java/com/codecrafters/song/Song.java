@@ -36,6 +36,8 @@ public class Song {
 
     private int durationInSeconds;
     private long hypemLovedCount;
+
+    @Column(length = 500)
     private String streamUrl;
     private String soundcloudUrl;
     private String soundcloudId;
