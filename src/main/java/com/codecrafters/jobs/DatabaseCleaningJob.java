@@ -18,6 +18,8 @@ import com.codecrafters.song.SongService;
 public class DatabaseCleaningJob {
 
     private static final int HEROKU_MAX_DATABASE_ROWS = 10_000;
+    private static final int SONGS_PER_CHART = 50;
+    private static final int HEROKU_MAX_DATABASE_ROWS_GAP = 2000;
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCleaningJob.class);
 
     private final ChartsService chartsService;
@@ -36,8 +38,8 @@ public class DatabaseCleaningJob {
 
         final long numberOfCharts = chartsService.count();
         final long numberOfSongs = songService.count();
-        final long maxNumberOfCharts = HEROKU_MAX_DATABASE_ROWS / 500;
-        final long maxNumberOfSongs = HEROKU_MAX_DATABASE_ROWS - 1000;
+        final long maxNumberOfCharts = HEROKU_MAX_DATABASE_ROWS / SONGS_PER_CHART;
+        final long maxNumberOfSongs = HEROKU_MAX_DATABASE_ROWS - HEROKU_MAX_DATABASE_ROWS_GAP;
 
         LOGGER.info("Number of charts: {}/{}", numberOfCharts, maxNumberOfCharts);
         LOGGER.info("Number of songs: {}/{}", numberOfSongs, maxNumberOfSongs);
