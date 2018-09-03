@@ -13,6 +13,13 @@ You have to setup a postgres database and edit the _application,properties_ file
 
 To start the project simply hit
 ```
+// start database
+docker run --name unhypem-db -p 5432:5432 -e POSTGRES_PASSWORD=admin -e POSTGRES_DB=unhypem -d postgres
+
+// start hypem proxy
+docker run --name unhypem-proxy -d feedme/unhypem-proxy
+
+// start app
 gradlew bootRun
 ```
 
@@ -44,6 +51,6 @@ gradlew dependencyUpdates -Drevision=release
 
 To check for vulnerabilities in the dependencies run
 ```
-gradlew dependencyCheck --info
+gradlew dependencyCheckAnalyze
 ```
 The reports will be generated automatically under `build/reports` folder
