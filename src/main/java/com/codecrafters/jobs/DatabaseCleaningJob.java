@@ -17,9 +17,13 @@ import com.codecrafters.song.SongService;
 @Component
 public class DatabaseCleaningJob {
 
-    private static final int HEROKU_MAX_DATABASE_ROWS = 10_000;
     private static final int SONGS_PER_CHART = 50;
-    private static final int HEROKU_MAX_DATABASE_ROWS_GAP = 2000;
+
+    // overall heroku maximum database rows is 10.000 - as we leave some gap to prevent
+    // warning mails we just go to maximum 8000 rows
+    private static final int HEROKU_MAX_SONGS = 5000;
+    private static final int HEROKU_MAX_CHARTS = 3000 / SONGS_PER_CHART;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCleaningJob.class);
 
     private final ChartsService chartsService;
@@ -38,19 +42,17 @@ public class DatabaseCleaningJob {
 
         final long numberOfCharts = chartsService.count();
         final long numberOfSongs = songService.count();
-        final long maxNumberOfCharts = (HEROKU_MAX_DATABASE_ROWS - HEROKU_MAX_DATABASE_ROWS_GAP)/ SONGS_PER_CHART;
-        final long maxNumberOfSongs = HEROKU_MAX_DATABASE_ROWS - HEROKU_MAX_DATABASE_ROWS_GAP;
 
-        LOGGER.info("Number of charts: {}/{}", numberOfCharts, maxNumberOfCharts);
-        LOGGER.info("Number of songs: {}/{}", numberOfSongs, maxNumberOfSongs);
+        LOGGER.info("Number of charts: {}/{}", numberOfCharts, HEROKU_MAX_CHARTS);
+        LOGGER.info("Number of songs: {}/{}", numberOfSongs, HEROKU_MAX_SONGS);
 
         // divide through 50 as every chart has a mapping table to the songs with 50 rows each
-        if (numberOfCharts >= maxNumberOfCharts) {
+        if (numberOfCharts >= HEROKU_MAX_CHARTS) {
             LOGGER.warn("Maximum number of charts reached, clearing...");
             chartsService.deleteSomeOfTheOldestRecords();
         }
 
-        if (numberOfSongs >= maxNumberOfSongs) {
+        if (numberOfSongs >= HEROKU_MAX_SONGS) {
             LOGGER.warn("Maximum number of songs reached, clearing...");
             songService.deleteSomeOfTheOldestRecords();
         }
